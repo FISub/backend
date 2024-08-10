@@ -15,7 +15,7 @@ public class MemberDAO {
     }
 
     public String login(Map<String, String> reqMap) {
-        String sql = "SELECT * FROM member WHERE mem_id = ? AND mem_pw = ?";
+        String sql = "SELECT COUNT(*) FROM member WHERE mem_id = ? AND mem_pw = ?";
         String id = reqMap.get("id");
         String pw = reqMap.get("pw");
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id, pw);
