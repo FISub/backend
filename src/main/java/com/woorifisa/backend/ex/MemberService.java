@@ -3,6 +3,8 @@ package com.woorifisa.backend.ex;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -22,5 +24,13 @@ public class MemberService {
                         .build();
     }
     
+
+    // save() 를 통한 update
+    @Transactional
+    public void updateMemberName(Long id, String name){
+        MemberEx member = memberRepository.findById(id).orElse(null);
+        member.setName(name);
+        memberRepository.save(member);
+    }
 }
 
