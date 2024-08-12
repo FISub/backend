@@ -8,10 +8,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Table(name = "memberex")
+
 @Entity
 public class MemberEx {
     @Id
@@ -25,3 +28,5 @@ public class MemberEx {
     private String name;
 
 }
+
+
