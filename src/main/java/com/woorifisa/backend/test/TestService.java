@@ -2,16 +2,7 @@ package com.woorifisa.backend.test;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-@Service
-public class TestService {
-    
-    @Autowired
-    MemberDAO dao;
-
-    public String login(Map<String, String> reqMap){
-        return dao.login(reqMap);
-    }
+public interface TestService {
+    public MemberDTO login(Map<String, String> reqMap) throws LoginException;
+    public String updateMem(Map<String, String> reqMap);
 }

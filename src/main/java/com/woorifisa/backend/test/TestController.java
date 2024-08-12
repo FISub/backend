@@ -3,34 +3,37 @@ package com.woorifisa.backend.test;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @Tag(name = "login test")
-@RequestMapping("/user")
+@RequestMapping("/member")
 public class TestController {
 
     @Autowired
     TestService testService;
 
+    // 로그인(test)
     @PostMapping("/login")
-    @Operation(summary = "로그인", description = "상세 설명 ~~~")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "로그인에 성공했습니다."),
-        @ApiResponse(responseCode = "4xx", description = "비밀번호가 틀렸습니다."),
-        @ApiResponse(responseCode = "4xx", description = "존재하지 않는 id입니다.")
-    })
-    public String login(@RequestBody Map<String, String> reqMap) {
-        return testService.login(reqMap);
-         
+    public MemberDTO login(@RequestBody Map<String, String> reqMap) throws LoginException{
+        return testService.login(reqMap);         
     }
-
+    
+    // id 수정(test)
+    @PostMapping("/updateMem")
+    public String updateMem(@RequestBody Map<String, String> reqMap) {        
+        return testService.updateMem(reqMap);
+    }
+    
+    @ExceptionHandler
+    public String nonLogin(LoginException e){
+        e.printStackTrace();
+        return e.getMessage();
+    }
 }

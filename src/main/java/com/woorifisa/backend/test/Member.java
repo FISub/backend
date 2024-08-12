@@ -2,21 +2,24 @@ package com.woorifisa.backend.test;
 
 import java.util.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Getter
-@Setter
-@Builder
-public class MemberDTO {
-   private String memNum;
+@ToString
+@Entity
+@Table(name = "member")
+public class Member {
+    
+    @Id
+    private String memNum;
     private String memId;
     private String memPw;
     private String memName;
