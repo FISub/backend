@@ -1,4 +1,4 @@
-package com.woorifisa.backend.config;
+package com.woorifisa.backend.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

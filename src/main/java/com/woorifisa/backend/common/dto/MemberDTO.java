@@ -1,4 +1,4 @@
-package com.woorifisa.backend.test;
+package com.woorifisa.backend.common.dto;
 
 import java.util.Date;
 
