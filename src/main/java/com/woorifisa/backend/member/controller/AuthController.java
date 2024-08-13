@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.MemberDTO;
-import com.woorifisa.backend.member.LoginException;
 import com.woorifisa.backend.member.dto.LoginDTO;
+import com.woorifisa.backend.member.exception.LoginException;
 import com.woorifisa.backend.member.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,5 +28,11 @@ public class AuthController {
         String message = authService.login(loginDTO.getId(), loginDTO.getPw(),session);         
         response.addCookie(new jakarta.servlet.http.Cookie("JSESSIONID", session.getId()));
         return message;
+    }
+
+    @PostMapping("/join")
+    @Operation(summary = "회원가입 (개발 중)", description = "회원가입 시 회원 정보를 저장")
+    public String join(@RequestBody MemberDTO memberDTO){
+        return null;
     }
 }

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import com.woorifisa.backend.common.dto.MemberDTO;
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.repository.MemberRepository;
-import com.woorifisa.backend.member.LoginException;
+import com.woorifisa.backend.member.exception.JoinException;
+import com.woorifisa.backend.member.exception.LoginException;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -37,6 +38,11 @@ public class AuthServiceImpl implements AuthService {
         } else {
             throw new LoginException("존재하지 않는 아이디 입니다.");
         }
+    }
+
+    @Override
+    public String join(MemberDTO memberDTO) throws JoinException {
+        return null;
     }
 
 
