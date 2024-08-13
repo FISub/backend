@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface SubscriptionRepository extends JpaRepository<com.woorifisa.backend.common.entity.Subscription, String>{
 
     @Modifying
-    @Query(value = "insert into subscription(sub_per, sub_start, sub_deli, sub_stat, sub_upd, sub_cnt, mem_num, pay_num, prod_num)" 
+    @Query(value = "insert into subscription(sub_per, sub_start, sub_deli, sub_stat, sub_upd, sub_cnt, mem_num, prod_num, pay_num)" 
                     +"values(:subPer, :subStart, :subDeli, :subStat, :subUpd, :subCnt, :memNum, :prodNum, :payNum)", nativeQuery = true)
     public int insertSub(@Param("subPer") int subPer,
                          @Param("subStart") Date subStart,

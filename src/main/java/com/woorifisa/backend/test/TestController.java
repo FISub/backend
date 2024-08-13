@@ -13,8 +13,6 @@ import com.woorifisa.backend.common.dto.MemberDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
