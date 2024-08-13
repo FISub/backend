@@ -1,4 +1,4 @@
-package com.woorifisa.backend.product;
+package com.woorifisa.backend.product.controller;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 
 import com.woorifisa.backend.common.dto.ProductDTO;
+import com.woorifisa.backend.product.service.ProductService;
 
 @RestController
 @RequiredArgsConstructor

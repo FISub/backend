@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woorifisa.backend.common.dto.ReviewDTO;
-import com.woorifisa.backend.manage.repository.ReviewRepository;
+import com.woorifisa.backend.common.repository.ReviewRepository;
 
 import jakarta.transaction.Transactional;
 
