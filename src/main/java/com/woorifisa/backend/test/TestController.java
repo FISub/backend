@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.woorifisa.backend.common.dto.MemberDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -24,12 +27,14 @@ public class TestController {
 
     // 로그인(test)
     @PostMapping("/login")
+    @Operation(summary = "로그인 테스트 (개발 완료)", description = "상세 설명 ~~~")
     public MemberDTO login(@RequestBody Map<String, String> reqMap) throws LoginException{
         return testService.login(reqMap);         
     }
     
     // id 수정(test)
     @PostMapping("/updateMem")
+    @Operation(summary = "memberID 수정 (개발 완료)", description = "상세 설명 ~~~")
     public String updateMem(@RequestBody Map<String, String> reqMap) {        
         return testService.updateMem(reqMap);
     }
@@ -41,11 +46,13 @@ public class TestController {
     }
 
     @PostMapping("/insertMem")
+    @Operation(summary = "member 추가 (개발 완료)", description = "상세 설명 ~~~")
     public String insertMem(@RequestBody MemberDTO dto) {              
         return testService.insertMem(dto);
     }
 
     @PostMapping("/insertSub")
+    @Operation(summary = "subscription 추가 (개발 완료)", description = "상세 설명 ~~~")
     public String postMethodName(@RequestBody SubscriptionDTO dto) {
         
         return testService.insertSub(dto);
