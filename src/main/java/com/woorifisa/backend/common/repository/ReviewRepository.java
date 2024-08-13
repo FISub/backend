@@ -1,4 +1,4 @@
-package com.woorifisa.backend.manage.repository;
+package com.woorifisa.backend.common.repository;
 
 import java.util.Optional;
 

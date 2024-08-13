@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woorifisa.backend.common.dto.PaymentDTO;
-import com.woorifisa.backend.main.repository.MainRepository;
+import com.woorifisa.backend.common.repository.PaymentRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -12,7 +12,7 @@ import jakarta.transaction.Transactional;
 public class MainServiceImpl implements MainService {
 
     @Autowired
-    private MainRepository mainRepository;
+    private PaymentRepository mainRepository;
 
     // private ModelMapper modelMapper = new ModelMapper();
 

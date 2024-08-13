@@ -1,10 +1,11 @@
-package com.woorifisa.backend.product;
+package com.woorifisa.backend.product.service;
 
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.woorifisa.backend.common.dto.ProductDTO;
+import com.woorifisa.backend.common.repository.ProductRepository;
 
 @RequiredArgsConstructor
 @Service

@@ -1,4 +1,4 @@
-package com.woorifisa.backend.product;
+package com.woorifisa.backend.product.service;
 
 import com.woorifisa.backend.common.dto.ProductDTO;
 
