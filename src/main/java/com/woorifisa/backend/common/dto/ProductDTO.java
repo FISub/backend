@@ -15,4 +15,9 @@ import lombok.ToString;
 @Builder
 public class ProductDTO {
     private String prodNum;
+    private String prodName;
+    private int prodPrice;
+    private String prodIntro;
+    private String prodImg;
+    private String memNum;    
 }
