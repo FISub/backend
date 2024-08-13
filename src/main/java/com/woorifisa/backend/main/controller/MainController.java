@@ -1,18 +1,23 @@
 package com.woorifisa.backend.main.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.PaymentDTO;
+import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.main.service.MainService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 
 @RestController
@@ -23,6 +28,14 @@ public class MainController {
     @Autowired
     private MainService mainService;
 
+    // main 상품 미리보기
+    @GetMapping("/preview")
+    public List<ProductDTO> preview() {
+        return mainService.preview();
+    }
+    
+
+    // 결제 정보 추가
     @PostMapping("/insertCard")
     @Operation(summary = "결제방식 추가 (test)", description = "결제 방식 추가")
     @ApiResponses(value = {
