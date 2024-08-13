@@ -6,6 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.woorifisa.backend.common.dto.MemberDTO;
+
 import jakarta.transaction.Transactional;
 
 @Service
