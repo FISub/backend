@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.MemberDTO;
 import com.woorifisa.backend.member.dto.LoginDTO;
+import com.woorifisa.backend.member.exception.JoinException;
 import com.woorifisa.backend.member.exception.LoginException;
 import com.woorifisa.backend.member.service.AuthService;
 
@@ -31,8 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/join")
-    @Operation(summary = "회원가입 (개발 중)", description = "회원가입 시 회원 정보를 저장")
-    public String join(@RequestBody MemberDTO memberDTO){
-        return null;
+    @Operation(summary = "회원가입 (개발 완료)", description = "회원가입 시 회원 정보를 저장")
+    public String join(@RequestBody MemberDTO memberDTO) throws JoinException{
+        return authService.join(memberDTO);
     }
 }

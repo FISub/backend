@@ -1,10 +1,10 @@
 package com.woorifisa.backend.member.service;
 
-import java.util.Map;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.woorifisa.backend.common.dto.MemberDTO;
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.repository.MemberRepository;
@@ -40,9 +40,19 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    @Transactional
     @Override
     public String join(MemberDTO memberDTO) throws JoinException {
-        return null;
+        try{
+            memberRepository.insertMem(memberDTO.getMemName(), memberDTO.getMemId(), memberDTO.getMemPw(), 
+                                       memberDTO.getMemEmail(), memberDTO.getMemPhone(), memberDTO.getMemSex(), 
+                                       memberDTO.getMemAddr(), memberDTO.getMemBirth(), memberDTO.getMemType());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new JoinException("회원가입 실패");
+        }
+        return "회원가입에 성공하였습니다.";
+        
     }
 
 
