@@ -23,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
                 productDTO.getProdPrice(),
                 productDTO.getProdIntro(),
                 productDTO.getProdImg(),
+                productDTO.getProdCat(),
                 productDTO.getMemNum()
             );
         } catch (Exception e) {

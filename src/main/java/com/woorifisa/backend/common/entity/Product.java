@@ -33,6 +33,8 @@ public class Product {
     @NotNull
     private String prodImg;
     @NotNull
+    private int prodCat;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "mem_num")
     private Member memNum;
