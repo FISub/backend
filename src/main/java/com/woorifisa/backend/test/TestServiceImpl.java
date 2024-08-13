@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woorifisa.backend.common.dto.MemberDTO;
+import com.woorifisa.backend.common.entity.Member;
 
 import jakarta.transaction.Transactional;
 
@@ -18,7 +19,7 @@ public class TestServiceImpl implements TestService {
 
     private ModelMapper mapper = new ModelMapper();
 
-    public MemberDTO login(Map<String, String> reqMap) throws LoginException{
+    public MemberDTO login(Map<String, String> reqMap) throws LoginException {
         Member member = repository.findByMemId(reqMap.get("id")).orElse(null);
         System.out.println(member);
         if (member != null) {
@@ -38,9 +39,21 @@ public class TestServiceImpl implements TestService {
     @Transactional
     public String updateMem(Map<String, String> reqMap) {
         int result = repository.updateByMemnumMemId(reqMap.get("mem_num"), reqMap.get("mem_id"));
-        if(result != 1){
+        if (result != 1) {
             return "수정 실패";
         }
         return "수정 성공";
+    }
+
+    @Override
+    @Transactional
+    public String insertMem(MemberDTO dto) {
+        int result = repository.insertMem(dto.getMemName(), dto.getMemId(), dto.getMemPw(), dto.getMemEmail(),
+                dto.getMemPhone(), dto.getMemSex(), dto.getMemAddr(), dto.getMemBirth(), dto.getMemType());
+
+        if(result == 1){
+            return "insert success";
+        }
+        return "insert fail";
     }
 }
