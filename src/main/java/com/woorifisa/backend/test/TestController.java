@@ -38,4 +38,10 @@ public class TestController {
         e.printStackTrace();
         return e.getMessage();
     }
+
+    @PostMapping("/insertMem")
+    public String insertMem(@RequestBody MemberDTO dto) {              
+        return testService.insertMem(dto);
+    }
+    
 }
