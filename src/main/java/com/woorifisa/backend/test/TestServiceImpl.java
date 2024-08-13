@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woorifisa.backend.common.dto.MemberDTO;
+import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.common.entity.Member;
+import com.woorifisa.backend.common.repository.SubscriptionRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -16,6 +18,9 @@ public class TestServiceImpl implements TestService {
 
     @Autowired
     MemberRepository2 repository;
+
+    @Autowired
+    SubscriptionRepository subscriptionRepository;
 
     private ModelMapper mapper = new ModelMapper();
 
@@ -55,5 +60,18 @@ public class TestServiceImpl implements TestService {
             return "insert success";
         }
         return "insert fail";
+    }
+
+    @Transactional
+    @Override
+    public String insertSub(SubscriptionDTO dto)   {
+        try {
+            subscriptionRepository.insertSub(dto.getSubPer(),dto.getSubStart(), dto.getSubDeli(), dto.getSubStat(), dto.getSubUpd(), dto.getSubCnt(), dto.getMemNum(), dto.getProdNum(), dto.getPayNum());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "실패" + e.getMessage();
+        }
+        
+        return "성공";
     }
 }

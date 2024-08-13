@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.MemberDTO;
+import com.woorifisa.backend.common.dto.SubscriptionDTO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -43,5 +44,12 @@ public class TestController {
     public String insertMem(@RequestBody MemberDTO dto) {              
         return testService.insertMem(dto);
     }
+
+    @PostMapping("/insertSub")
+    public String postMethodName(@RequestBody SubscriptionDTO dto) {
+        
+        return testService.insertSub(dto);
+    }
+    
     
 }
