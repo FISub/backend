@@ -9,7 +9,6 @@ import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.repository.MemberRepository;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
 
-import jakarta.servlet.http.HttpSession;
 
 
 @Service
