@@ -17,15 +17,19 @@ import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
 import com.woorifisa.backend.main.service.MainService;
+import com.woorifisa.backend.member.dto.LoginSessionDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 
 
-
+@Slf4j
 @RestController
 @RequestMapping("/main")
 @Tag(name = "main controller")
@@ -48,7 +52,18 @@ public class MainController {
     
     // 상품 상세보기
     @GetMapping("/productDetail/{prodNum}")
-    public ProductDTO productDetail(@PathVariable("prodNum") String prodNum) throws NoProductException {
+    public ProductDTO productDetail(@PathVariable("prodNum") String prodNum, HttpServletRequest request) throws NoProductException {
+        // 세션에서 로그인 정보 가져오기
+        HttpSession session = request.getSession();
+        LoginSessionDTO login = (LoginSessionDTO) session.getAttribute("login");
+        
+        // 조회수 log 남기기
+        if (login != null) { // 로그인된 경우
+            log.info(prodNum + " - " + login.getMemNum());
+        } else {             // 로그인하지 않은 경우
+            log.info(prodNum + " - mUNDEFINED");
+        }
+
         return mainService.productDetail(prodNum);
     }
     
