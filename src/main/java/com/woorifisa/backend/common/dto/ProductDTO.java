@@ -19,5 +19,6 @@ public class ProductDTO {
     private int prodPrice;
     private String prodIntro;
     private String prodImg;
+    private int prodCat;
     private String memNum;    
 }
