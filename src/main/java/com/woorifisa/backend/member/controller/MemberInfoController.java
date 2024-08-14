@@ -10,13 +10,12 @@ import com.woorifisa.backend.member.service.AuthService;
 import com.woorifisa.backend.member.service.MemberInfoService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -44,7 +43,7 @@ public class MemberInfoController {
         }
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @Operation(summary = "유저 정보 수정 (개발 완료 - 그러나 예외 처리 추가 해야함)", description = "user 로그인 정보 검증 후 정보 수정")
     public String updateMemberInfo(@RequestBody MemberInfoDTO memberInfoDTO, HttpServletRequest request) throws SessionNotValidException {
         HttpSession session = request.getSession();
