@@ -5,7 +5,7 @@ import com.woorifisa.backend.member.dto.MemberInfoDTO;
 import com.woorifisa.backend.member.exception.JoinException;
 import com.woorifisa.backend.member.exception.LoginException;
 
-import jakarta.servlet.http.Cookie;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 

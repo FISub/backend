@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.woorifisa.backend.common.dto.MemberDTO;
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.repository.MemberRepository;
 import com.woorifisa.backend.member.dto.LoginResponseDTO;
@@ -14,7 +13,7 @@ import com.woorifisa.backend.member.dto.MemberInfoDTO;
 import com.woorifisa.backend.member.exception.JoinException;
 import com.woorifisa.backend.member.exception.LoginException;
 
-import jakarta.servlet.http.Cookie;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
