@@ -10,7 +10,7 @@ import com.woorifisa.backend.common.entity.Member;
 
 
 public interface MemberRepository extends JpaRepository<Member, String> {
-    Optional<Member> findByMemId(String memId);
+    Member findByMemId(String memId);
 
     @Modifying
     @Query(value = "update member set mem_id = :memId where mem_num = :memNum", nativeQuery = true)
@@ -27,4 +27,17 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             @Param("addr") String addr,
             @Param("birth") Date birth,
             @Param("type") int type);
+
+    @Modifying
+    @Query(value = "UPDATE member SET mem_id = :memId, mem_pw = :memPw, mem_name = :memName, mem_email = :memEmail, mem_phone = :memPhone, mem_sex = :memSex, mem_birth = :memBirth, mem_addr = :memAddr, mem_type = :memType WHERE mem_num = :memNum", nativeQuery = true)
+    void updateMemberInfo(@Param("memNum") String memNum,
+                        @Param("memId") String memId,
+                        @Param("memPw") String memPw,
+                        @Param("memName") String memName,
+                        @Param("memEmail") String memEmail,
+                        @Param("memPhone") String memPhone,
+                        @Param("memSex") String memSex,
+                        @Param("memBirth") Date memBirth,
+                        @Param("memAddr") String memAddr,
+                        @Param("memType") int memType);
 }
