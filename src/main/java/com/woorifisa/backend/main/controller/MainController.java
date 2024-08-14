@@ -75,7 +75,11 @@ public class MainController {
     
     // 리뷰 등록
     @PostMapping("/reviewInsert")
-    public ReviewPrintDTO reviewInsert(@RequestBody ReviewDTO dto) { 
+    public ReviewPrintDTO reviewInsert(@RequestBody ReviewDTO dto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
+        dto.setMemNum(memNum);
+        
         return mainService.reviewInsert(dto);
     }
     
