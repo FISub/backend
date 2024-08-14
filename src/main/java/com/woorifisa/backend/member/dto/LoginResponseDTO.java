@@ -1,6 +1,7 @@
 package com.woorifisa.backend.member.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +10,9 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class LoginDTO {
-    private String id;
-    private String pw;
+@Builder
+public class LoginResponseDTO {
+    private String memNum;
+    private String memId;
+    private int memType;
 }
