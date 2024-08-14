@@ -30,4 +30,15 @@ public class ProductController {
     public String insertProduct(@RequestBody ProductDTO productDTO) {
         return productService.insertProduct(productDTO);
     }
+
+    // 상품 수정 (Update)
+    @PutMapping("/products/{prodNum}")
+    @Operation(summary = "상품 수정", description = "기존 상품의 정보를 수정합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "상품 수정 성공"),
+        @ApiResponse(responseCode = "4xx", description = "상품 수정 실패")
+    })
+    public String updateProduct(@PathVariable String prodNum, @RequestBody ProductDTO productDTO) {
+        return productService.updateProduct(prodNum, productDTO);
+    }
 }

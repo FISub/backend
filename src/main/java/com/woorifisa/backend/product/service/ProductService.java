@@ -6,4 +6,5 @@ public interface ProductService {
 
     String insertProduct(ProductDTO productDTO);
 
+    String updateProduct(String prodNum, ProductDTO productDTO);
 }

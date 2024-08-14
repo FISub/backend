@@ -1,10 +1,9 @@
 package com.woorifisa.backend.member.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.MemberDTO;
@@ -17,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+
+@RequestMapping("/auth")
 @RestController
 public class AuthController {
 
