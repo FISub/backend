@@ -33,4 +33,24 @@ public class ProductServiceImpl implements ProductService {
         return "성공";
     }
 
+    // 상품 수정 (Update)
+    @Transactional
+    @Override
+    public String updateProduct(String prodNum, ProductDTO productDTO) {
+        try {
+            productRepository.updateProduct(
+                productDTO.getProdNum(),
+                productDTO.getProdName(),
+                productDTO.getProdPrice(),
+                productDTO.getProdIntro(),
+                productDTO.getProdImg(),
+                productDTO.getProdCat(),
+                productDTO.getMemNum()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "실패: " + e.getMessage();
+        }
+        return "성공";
+    }
 }

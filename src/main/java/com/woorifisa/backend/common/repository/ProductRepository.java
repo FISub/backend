@@ -27,4 +27,17 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Modifying
     @Query(value= "select * from product order by prod_num desc limit 8", nativeQuery = true)
     public List<Product> preview();
+    // 상품 수정
+    @Modifying
+    @Query("UPDATE Product p SET p.prodName = :prodName, p.prodPrice = :prodPrice, p.prodIntro = :prodIntro, p.prodImg = :prodImg, p.prodCat = :prodCat, p.memNum.memNum = :memNum WHERE p.prodNum = :prodNum")
+    void updateProduct(
+        @Param("prodNum") String prodNum,
+        @Param("prodName") String prodName,
+        @Param("prodPrice") int prodPrice,
+        @Param("prodIntro") String prodIntro,
+        @Param("prodImg") String prodImg,
+        @Param("prodCat") int prodCat,
+        @Param("memNum") String memNum
+    );
+    
 }
