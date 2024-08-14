@@ -47,4 +47,20 @@ public class MainServiceImpl implements MainService {
                                           .collect(Collectors.toList());
         return dtoList;
     }
+
+    @Override
+    @Transactional
+    public List<ProductDTO> allProductByCategory(int category) {
+        List<Product> product = null;
+        if(category == -99999){
+            product = productRepository.findAll();
+        }else{
+            product = productRepository.allProductByCategory(category);
+        }        
+
+        List<ProductDTO> dtoList = product.stream()
+                                          .map(prod -> modelMapper.map(prod, ProductDTO.class))
+                                          .collect(Collectors.toList());
+        return dtoList;
+    }
 }

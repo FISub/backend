@@ -11,4 +11,5 @@ import com.woorifisa.backend.common.dto.ProductDTO;
 public interface MainService {
     public String insertCard(PaymentDTO dto);
     public List<ProductDTO> preview();
+    public List<ProductDTO> allProductByCategory(int category);
 }

@@ -25,6 +25,11 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     );
     // main 상품 미리보기 list 출력
     @Modifying
-    @Query(value= "select * from product order by prod_num desc limit 8", nativeQuery = true)
+    @Query(value = "select * from product order by prod_num desc limit 8", nativeQuery = true)
     public List<Product> preview();
+
+    // 상품list 페이지 (category 클릭시 해당 카테고리 해당하는 product만 호출)
+    @Modifying
+    @Query(value = "SELECT * FROM product WHERE prod_cat = :category", nativeQuery = true)
+    public List<Product> allProductByCategory(@Param("category") Integer category);
 }
