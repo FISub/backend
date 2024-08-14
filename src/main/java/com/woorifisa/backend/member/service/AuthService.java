@@ -5,6 +5,7 @@ import com.woorifisa.backend.member.dto.MemberInfoDTO;
 import com.woorifisa.backend.member.exception.JoinException;
 import com.woorifisa.backend.member.exception.LoginException;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -13,7 +14,7 @@ public interface AuthService {
 
     public String join(MemberInfoDTO memberInfoDTO) throws JoinException;
 
-    public boolean isValidSession(String sessionId, HttpSession session);
+    public boolean isValidSession(HttpSession session);
 
-    public String logout();
+    public String logout(HttpSession session);
 }

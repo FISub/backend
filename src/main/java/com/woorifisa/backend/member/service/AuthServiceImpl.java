@@ -14,6 +14,7 @@ import com.woorifisa.backend.member.dto.MemberInfoDTO;
 import com.woorifisa.backend.member.exception.JoinException;
 import com.woorifisa.backend.member.exception.LoginException;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -28,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponseDTO login(String id, String pw, HttpServletRequest request) throws LoginException {
-        Member member = memberRepository.findByMemId(id).orElse(null);
+        Member member = memberRepository.findByMemId(id);
         System.out.println(member);
         if (member != null) {
             if (pw.equals(member.getMemPw())) {
@@ -70,19 +71,26 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean isValidSession(String sessionId, HttpSession session){
-        if (sessionId == null || !sessionId.equals(session.getId())) {
+    public boolean isValidSession(HttpSession session){
+        System.out.println(session.getId());
+        LoginSessionDTO loginSession = (LoginSessionDTO) session.getAttribute("login");
+        if (loginSession == null || loginSession.getMemId() == null || loginSession.getMemNum() == null || loginSession.getMemType() == 0) {
+            
             return false;
         } else {
-            // 세션에 userId 속성이 있는지 확인하여 유효성을 판단
-            String userId = (String) session.getAttribute("userId");
-            return userId != null;
+            return true;
         }        
     }
 
     @Override
-    public String logout() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'logout'");
+    public String logout(HttpSession session){
+        try{
+            session.invalidate();
+    
+            return "로그아웃 완료";
+        } catch (Exception e) {
+            return "로그아웃 실패";
+        }
+        
     }
 }
