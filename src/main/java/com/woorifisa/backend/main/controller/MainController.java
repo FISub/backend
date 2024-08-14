@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
+import com.woorifisa.backend.main.exception.NoProductException;
 import com.woorifisa.backend.main.service.MainService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,17 +33,24 @@ public class MainController {
     private MainService mainService;
 
     // main 상품 미리보기
-    @GetMapping("/preview")
-    public List<ProductDTO> preview() {
-        return mainService.preview();
+    @GetMapping("/productPreview")
+    public List<ProductDTO> productPreview() {
+        return mainService.productPreview();
     }
     
-    // main 상품 전체
-    @GetMapping("/allProduct")
-    public List<ProductDTO> allProductByCategory(@RequestParam(value = "category", defaultValue  = "-99999") int category) {
-        return mainService.allProductByCategory(category);
+    // 상품 리스트 보기(카테고리별, 없을 시 전체)
+    @GetMapping("/productAll")
+    public List<ProductDTO> productAllByCategory(@RequestParam(value = "category", defaultValue  = "-99999") int category) {
+        return mainService.productAllByCategory(category);
     }
     
+    // 상품 상세보기
+    @GetMapping("/productDetail/{prodNum}")
+    public ProductDTO productDetail(@PathVariable("prodNum") String prodNum) throws NoProductException {
+        return mainService.productDetail(prodNum);
+    }
+    
+
 
     // 결제 정보 추가
     @PostMapping("/insertCard")

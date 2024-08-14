@@ -12,6 +12,7 @@ import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.entity.Product;
 import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
+import com.woorifisa.backend.main.exception.NoProductException;
 
 import jakarta.transaction.Transactional;
 
@@ -39,8 +40,8 @@ public class MainServiceImpl implements MainService {
 
     @Override
     @Transactional
-    public List<ProductDTO> preview() {
-        List<Product> product = productRepository.preview();
+    public List<ProductDTO> productPreview() {
+        List<Product> product = productRepository.productPreview();
 
         List<ProductDTO> dtoList = product.stream()
                                           .map(prod -> modelMapper.map(prod, ProductDTO.class))
@@ -50,17 +51,28 @@ public class MainServiceImpl implements MainService {
 
     @Override
     @Transactional
-    public List<ProductDTO> allProductByCategory(int category) {
+    public List<ProductDTO> productAllByCategory(int category) {
         List<Product> product = null;
         if(category == -99999){
             product = productRepository.findAll();
         }else{
-            product = productRepository.allProductByCategory(category);
+            product = productRepository.productAllByCategory(category);
         }        
 
         List<ProductDTO> dtoList = product.stream()
                                           .map(prod -> modelMapper.map(prod, ProductDTO.class))
                                           .collect(Collectors.toList());
         return dtoList;
+    }
+
+    @Override
+    public ProductDTO productDetail(String prodNum) throws NoProductException{
+        Product product = productRepository.findById(prodNum).orElse(null);
+
+        if(product != null){
+            return modelMapper.map(product,ProductDTO.class);
+        } else {
+            throw new NoProductException("존재하지 않는 상품입니다.");
+        }        
     }
 }
