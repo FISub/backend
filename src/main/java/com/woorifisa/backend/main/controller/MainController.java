@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
+import com.woorifisa.backend.common.dto.ReviewDTO;
+import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
 import com.woorifisa.backend.main.service.MainService;
 
@@ -50,7 +52,18 @@ public class MainController {
         return mainService.productDetail(prodNum);
     }
     
-
+    // 상품 리뷰list 출력
+    @GetMapping("/review/{prodNum}")
+    public List<ReviewPrintDTO> reviewAllByProdNum(@PathVariable("prodNum") String prodNum) {
+        return mainService.reviewAllByProdNum(prodNum);
+    }
+    
+    // 리뷰 등록
+    @PostMapping("/reviewInsert")
+    public ReviewPrintDTO reviewInsert(@RequestBody ReviewDTO dto) { 
+        return mainService.reviewInsert(dto);
+    }
+    
 
     // 결제 정보 추가
     @PostMapping("/insertCard")

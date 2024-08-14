@@ -17,7 +17,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public String insertRev(ReviewDTO dto) {
-        int result = repository.insertRev(dto.getRevStar(), dto.getRevCont(), dto.getMemNum(), dto.getProdNum());
+        int result = repository.reviewInsert(dto.getRevStar(), dto.getRevCont(), dto.getMemNum(), dto.getProdNum());
 
         if(result == 1){
             return "insert success";

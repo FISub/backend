@@ -45,5 +45,5 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     // 상품list 페이지 (category 클릭시 해당 카테고리 해당하는 product만 호출)
     @Query(value = "SELECT * FROM product WHERE prod_cat = :category", nativeQuery = true)
-    public List<Product> productAllByCategory(@Param("category") Integer category);
+    public List<Product> productAllByCategory(@Param("category") int category);
 }
