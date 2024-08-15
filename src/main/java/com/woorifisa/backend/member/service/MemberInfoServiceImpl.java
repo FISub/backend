@@ -13,6 +13,7 @@ import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.entity.Subscription;
 import com.woorifisa.backend.common.exception.NoDataExsistException;
 import com.woorifisa.backend.common.repository.MemberRepository;
+import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
 import com.woorifisa.backend.member.dto.LoginSessionDTO;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
@@ -28,6 +29,8 @@ public class MemberInfoServiceImpl implements MemberInfoService{
     MemberRepository memberRepository;
     @Autowired
     SubscriptionRepository subscriptionRepository;
+    @Autowired
+    ProductRepository productRepository;
 
     @Override
     public MemberInfoDTO getMemberInfo(String memId) {
@@ -70,7 +73,7 @@ public class MemberInfoServiceImpl implements MemberInfoService{
             throw new NoDataExsistException("구독 정보가 존재하지 않습니다.");
         }
         return subList.stream()
-            .map(sub -> new SubscriptionDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum()))
+            .map(sub -> new SubscriptionDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg()))
             .collect(Collectors.toList());
     }
     
