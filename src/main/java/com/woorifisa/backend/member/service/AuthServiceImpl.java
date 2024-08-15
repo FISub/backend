@@ -57,6 +57,12 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public String join(MemberInfoDTO memberInfoDTO) throws JoinException {
+        String newMemID = memberInfoDTO.getMemId();
+        Member findedMember = memberRepository.findByMemId(newMemID);
+        if (findedMember != null){
+            throw new JoinException("이미 존재하는 ID");
+        }
+
         try{
             memberRepository.insertMem(memberInfoDTO.getMemName(), memberInfoDTO.getMemId(), memberInfoDTO.getMemPw(), 
                                        memberInfoDTO.getMemEmail(), memberInfoDTO.getMemPhone(), memberInfoDTO.getMemSex(), 
