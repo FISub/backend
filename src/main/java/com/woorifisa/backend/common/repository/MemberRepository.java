@@ -1,6 +1,8 @@
 package com.woorifisa.backend.common.repository;
 
 import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +12,9 @@ import com.woorifisa.backend.common.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
     Member findByMemId(String memId);
+
+    @Query(value = "select * from member order by mem_num", nativeQuery = true)
+    public List<Member> memberAll();
 
     @Modifying
     @Query(value = "update member set mem_id = :memId where mem_num = :memNum", nativeQuery = true)
