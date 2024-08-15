@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
+import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
 import com.woorifisa.backend.main.service.MainService;
 import com.woorifisa.backend.member.dto.LoginSessionDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -75,7 +74,7 @@ public class MainController {
     }
 
     // 상품 리뷰list 출력
-    @GetMapping("/review/{prodNum}")
+    @GetMapping("/reviewAllByProduct/{prodNum}")
     @Operation(summary = "상품에 대한 review 가져오기 (개발완료 - builder방식으로 변경할지 고민/토론)",
                 description = "prod_num으로 review 정보 select")
     public List<ReviewPrintDTO> reviewAllByProdNum(@PathVariable("prodNum") String prodNum) {
@@ -94,13 +93,20 @@ public class MainController {
         return mainService.reviewInsert(dto);
     }
 
+    // 결제 정보list 출력
+    @GetMapping("/paymentAllByMember")
+    @Operation(summary = "결제방식 출력 (개발중)", description = "memNum값으로 결제list 출력")
+    public List<PaymentPrintDTO> paymentAllByMember(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
+
+        return mainService.paymentAllByMember(memNum);
+    }
+    
+
     // 결제 정보 추가
     @PostMapping("/insertCard")
     @Operation(summary = "결제방식 추가 (test)", description = "결제 방식 추가")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "결제방식 추가 성공"),
-            @ApiResponse(responseCode = "4xx", description = "결제방식 추가 실패")
-    })
     public String insertCard(@RequestBody PaymentDTO dto) {
         return mainService.insertCard(dto);
     }
