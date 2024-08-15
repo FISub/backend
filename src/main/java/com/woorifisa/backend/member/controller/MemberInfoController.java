@@ -1,8 +1,11 @@
 package com.woorifisa.backend.member.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.common.exception.SessionNotValidException;
 import com.woorifisa.backend.member.dto.LoginSessionDTO;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
@@ -20,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
-@RequestMapping("/member/info")
+@RequestMapping("/member")
 @RestController
 public class MemberInfoController {
 
@@ -29,7 +32,7 @@ public class MemberInfoController {
     @Autowired
     MemberInfoService memberInfoService;
 
-    @GetMapping("/get")
+    @GetMapping("/info/get")
     @Operation(summary = "유저 정보 조회 (개발 완료 - 그러나 예외 처리 추가 해야함)", description = "세션에 저장된 user 정보를 통하여 조회")
     public MemberInfoDTO getMemberInfo(HttpServletRequest request) throws SessionNotValidException {
         HttpSession session = request.getSession();
@@ -39,21 +42,32 @@ public class MemberInfoController {
             return memberInfoService.getMemberInfo(((LoginSessionDTO) session.getAttribute("login")).getMemId());
         } else {
             // 세션 아이디가 유효하지 않은 경우
-            throw new SessionNotValidException("유효하지 않은 세션");
+            throw new SessionNotValidException("로그인 후 이용해 주세요");
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/info/update")
     @Operation(summary = "유저 정보 수정 (개발 완료 - 그러나 예외 처리 추가 해야함)", description = "user 로그인 정보 검증 후 정보 수정")
     public String updateMemberInfo(@RequestBody MemberInfoDTO memberInfoDTO, HttpServletRequest request) throws SessionNotValidException {
         HttpSession session = request.getSession();
         if (authService.isValidSession(session)){
             return memberInfoService.updateMemberInfo(memberInfoDTO, ((LoginSessionDTO)session.getAttribute("login")).getMemNum());
         } else {
-            throw new SessionNotValidException("유효하지 않은 세션");
+            throw new SessionNotValidException("로그인 후 이용해 주세요");
         }
         
     }
     
+    @GetMapping("/sublist/get")
+    @Operation(summary = "유저 구독 정보 조회 (개발 완료)", description = "user 로그인 정보 검증 후 정보 수정")
+    public List<SubscriptionDTO> getSubList(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        if (authService.isValidSession(session)){
+            return memberInfoService.getSubList(session);
+        } else {
+            throw new SessionNotValidException("로그인 후 이용해 주세요");
+        }
+        
+    }
     
 }
