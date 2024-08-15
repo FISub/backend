@@ -65,9 +65,9 @@ public class MainController {
 
         // 조회수 log 남기기
         if (login != null) { // 로그인된 경우
-            log.info(prodNum + " - " + login.getMemNum());
+            log.info(String.format("View - %s - %s", prodNum, login.getMemNum()));
         } else { // 로그인하지 않은 경우
-            log.info(prodNum + " - mUNDEFINED");
+            log.info(String.format("View - %s - mUNDEFINED", prodNum));
         }
 
         return mainService.productDetail(prodNum);

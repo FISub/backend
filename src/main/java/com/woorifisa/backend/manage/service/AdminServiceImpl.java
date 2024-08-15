@@ -1,7 +1,6 @@
 package com.woorifisa.backend.manage.service;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -46,5 +45,27 @@ public class AdminServiceImpl implements AdminService {
                 .map(prod -> modelMapper.map(prod, ProductDTO.class))
                 .collect(Collectors.toList());
       return dtoList;
+    }
+
+    @Override
+    @Transactional
+    public String deleteMem(String memNum) {
+        int result = memberRepository.deleteMem(memNum);
+
+        if (result == 1) {
+            return "member delete success";
+        }
+        return "member delete fail";
+    }
+    
+    @Override
+    @Transactional
+    public String deleteProd(String prodNum) {
+        int result = productRepository.deleteProd(prodNum);
+
+        if (result == 1) {
+            return "product delete success";
+        }
+        return "product delete fail";
     }
 }
