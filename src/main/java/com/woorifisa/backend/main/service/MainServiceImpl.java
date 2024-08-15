@@ -14,6 +14,7 @@ import com.woorifisa.backend.common.entity.Product;
 import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.ReviewRepository;
+import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
 
@@ -33,24 +34,12 @@ public class MainServiceImpl implements MainService {
 
     @Override
     @Transactional
-    public String insertCard(PaymentDTO dto) {
-        int result = paymentRepository.insertCard(dto.getMemNum(), dto.getPayCard(), dto.getPayExp(),
-                dto.getPayCvc(), dto.getPayPw());
-
-        if (result == 1) {
-            return "payment insert success";
-        }
-        return "payment insert fail";
-    }
-
-    @Override
-    @Transactional
     public List<ProductDTO> productPreview() {
         List<Product> product = productRepository.productPreview();
 
         List<ProductDTO> dtoList = product.stream()
-                .map(prod -> modelMapper.map(prod, ProductDTO.class))
-                .collect(Collectors.toList());
+                                          .map(prod -> modelMapper.map(prod, ProductDTO.class))
+                                          .collect(Collectors.toList());
         return dtoList;
     }
 
@@ -65,8 +54,8 @@ public class MainServiceImpl implements MainService {
         }
 
         List<ProductDTO> dtoList = product.stream()
-                .map(prod -> modelMapper.map(prod, ProductDTO.class))
-                .collect(Collectors.toList());
+                                          .map(prod -> modelMapper.map(prod, ProductDTO.class))
+                                          .collect(Collectors.toList());
         return dtoList;
     }
 
@@ -85,14 +74,14 @@ public class MainServiceImpl implements MainService {
     public List<ReviewPrintDTO> reviewAllByProdNum(String prodNum) {
         List<Object[]> results = reviewRepository.reviewAllByProdNum(prodNum);
         List<ReviewPrintDTO> review = results.stream()
-                .map(result -> new ReviewPrintDTO(
-                        (String) result[0], // revNum
-                        (String) result[1], // memNum
-                        (Integer) result[2], // revStar
-                        (String) result[3], // revCont
-                        (String) result[4] // memName
-                ))
-                .collect(Collectors.toList());
+                                             .map(result -> new ReviewPrintDTO(
+                                                     (String) result[0], // revNum
+                                                     (String) result[1], // memNum
+                                                     (Integer) result[2], // revStar
+                                                     (String) result[3], // revCont
+                                                     (String) result[4] // memName
+                                             ))
+                                             .collect(Collectors.toList());
 
         return review;
     }
@@ -109,14 +98,38 @@ public class MainServiceImpl implements MainService {
         if (result == 1) {
             Object[] object = reviewRepository.findTopByOrderByRevNumDesc().get(0);
             ReviewPrintDTO review = new ReviewPrintDTO(
-                (String) object[0], // revNum
-                (String) object[1], // memNum
-                ((Number) object[2]).intValue(), // revStar (Number to int)
-                (String) object[3], // revCont
-                (String) object[4]  // memName
-        );
+                    (String) object[0], // revNum
+                    (String) object[1], // memNum
+                    ((Number) object[2]).intValue(), // revStar (Number to int)
+                    (String) object[3], // revCont
+                    (String) object[4] // memName
+            );
             return review;
         }
         return null;
+    }
+
+    @Override
+    public List<PaymentPrintDTO> paymentAllByMember(String memNum) {
+        List<Object[]> payment = paymentRepository.paymentAllByMember(memNum);
+
+        List<PaymentPrintDTO> dtoList = payment.stream()
+                                               .map(result -> new PaymentPrintDTO(
+                                                    (String) result[0],  // payNum
+                                                    (String) result[1])) // payCard
+                                               .collect(Collectors.toList());
+        return dtoList;
+    }
+
+    @Override
+    @Transactional
+    public String insertCard(PaymentDTO dto) {
+        int result = paymentRepository.insertCard(dto.getMemNum(), dto.getPayCard(), dto.getPayExp(),
+                dto.getPayCvc(), dto.getPayPw());
+
+        if (result == 1) {
+            return "payment insert success";
+        }
+        return "payment insert fail";
     }
 }
