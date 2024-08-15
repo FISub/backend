@@ -52,4 +52,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     // admin 상품 전체보기
     @Query(value = "select * from product order by prod_num", nativeQuery = true)
     public List<Product> productAll();
+
+    @Modifying
+    @Query(value = "delete from product where prod_num = :prodNum", nativeQuery = true)
+    public int deleteProd(@Param("prodNum") String prodNum);
 }

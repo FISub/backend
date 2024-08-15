@@ -11,4 +11,6 @@ import com.woorifisa.backend.common.dto.ProductDTO;
 public interface AdminService {
     public List<MemberDTO> memberAll();
     public List<ProductDTO> productAll();
+    public String deleteMem(String memNum);
+    public String deleteProd(String prodNum);
 }
