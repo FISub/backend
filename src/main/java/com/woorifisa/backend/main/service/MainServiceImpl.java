@@ -7,13 +7,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.common.entity.Product;
 import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.ReviewRepository;
+import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
@@ -123,7 +123,7 @@ public class MainServiceImpl implements MainService {
 
     @Override
     @Transactional
-    public String insertCard(PaymentDTO dto) {
+    public String insertCard(PaymentInsertDTO dto) {
         int result = paymentRepository.insertCard(dto.getMemNum(), dto.getPayCard(), dto.getPayExp(),
                 dto.getPayCvc(), dto.getPayPw());
 

@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
+import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
@@ -95,7 +95,7 @@ public class MainController {
 
     // 결제 정보list 출력
     @GetMapping("/paymentAllByMember")
-    @Operation(summary = "결제방식 출력 (개발중)", description = "memNum값으로 결제list 출력")
+    @Operation(summary = "결제방식 출력 (개발완료)", description = "memNum값으로 결제list 출력")
     public List<PaymentPrintDTO> paymentAllByMember(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
@@ -105,9 +105,14 @@ public class MainController {
     
 
     // 결제 정보 추가
-    @PostMapping("/insertCard")
-    @Operation(summary = "결제방식 추가 (test)", description = "결제 방식 추가")
-    public String insertCard(@RequestBody PaymentDTO dto) {
+    @PostMapping("/paymentInsert")
+    @Operation(summary = "결제방식 추가 (개발완료)", description = "결제 방식 추가")
+    public String insertCard(@RequestBody PaymentInsertDTO dto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
+
+        dto.setMemNum(memNum);
+        System.out.println(dto);
         return mainService.insertCard(dto);
     }
 
