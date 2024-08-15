@@ -17,6 +17,10 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     public List<Member> memberAll();
 
     @Modifying
+    @Query(value = "delete from member where mem_num = :memNum", nativeQuery = true)
+    public int deleteMem(@Param("memNum") String memNum);
+
+    @Modifying
     @Query(value = "update member set mem_id = :memId where mem_num = :memNum", nativeQuery = true)
     public int updateByMemnumMemId(@Param("memNum") String memNum, @Param("memId") String memId);
 
@@ -44,4 +48,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                         @Param("memBirth") Date memBirth,
                         @Param("memAddr") String memAddr,
                         @Param("memType") int memType);
+
+        
 }
