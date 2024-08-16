@@ -73,7 +73,7 @@ public class MemberInfoServiceImpl implements MemberInfoService{
             throw new NoDataExsistException("구독 정보가 존재하지 않습니다.");
         }
         return subList.stream()
-            .map(sub -> new SubscriptionResponseDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg()))
+            .map(sub -> new SubscriptionResponseDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg(), sub.getProdNum().getProdName()))
             .collect(Collectors.toList());
     }
     
