@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.entity.Subscription;
 import com.woorifisa.backend.common.exception.NoDataExsistException;
@@ -17,6 +16,7 @@ import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
 import com.woorifisa.backend.member.dto.LoginSessionDTO;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
+import com.woorifisa.backend.member.dto.SubscriptionResponseDTO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -61,7 +61,7 @@ public class MemberInfoServiceImpl implements MemberInfoService{
     }
 
     @Override
-    public List<SubscriptionDTO> getSubList(HttpSession session) throws Exception {
+    public List<SubscriptionResponseDTO> getSubList(HttpSession session) throws Exception {
         LoginSessionDTO sessionDTO = (LoginSessionDTO) session.getAttribute("login");
         Member member = memberRepository.findById(sessionDTO.getMemNum()).orElse(null);
         if (member == null){
@@ -73,7 +73,7 @@ public class MemberInfoServiceImpl implements MemberInfoService{
             throw new NoDataExsistException("구독 정보가 존재하지 않습니다.");
         }
         return subList.stream()
-            .map(sub -> new SubscriptionDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg()))
+            .map(sub -> new SubscriptionResponseDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg()))
             .collect(Collectors.toList());
     }
     
