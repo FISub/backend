@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
+import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.common.entity.Product;
 import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.ReviewRepository;
+import com.woorifisa.backend.common.repository.SubscriptionRepository;
 import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
@@ -30,6 +32,8 @@ public class MainServiceImpl implements MainService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
+    private SubscriptionRepository subscriptionRepository;
+    @Autowired
     private ModelMapper modelMapper = new ModelMapper();
 
     @Override
@@ -38,8 +42,8 @@ public class MainServiceImpl implements MainService {
         List<Product> product = productRepository.productPreview();
 
         List<ProductDTO> dtoList = product.stream()
-                                          .map(prod -> modelMapper.map(prod, ProductDTO.class))
-                                          .collect(Collectors.toList());
+                .map(prod -> modelMapper.map(prod, ProductDTO.class))
+                .collect(Collectors.toList());
         return dtoList;
     }
 
@@ -54,8 +58,8 @@ public class MainServiceImpl implements MainService {
         }
 
         List<ProductDTO> dtoList = product.stream()
-                                          .map(prod -> modelMapper.map(prod, ProductDTO.class))
-                                          .collect(Collectors.toList());
+                .map(prod -> modelMapper.map(prod, ProductDTO.class))
+                .collect(Collectors.toList());
         return dtoList;
     }
 
@@ -74,14 +78,14 @@ public class MainServiceImpl implements MainService {
     public List<ReviewPrintDTO> reviewAllByProdNum(String prodNum) {
         List<Object[]> results = reviewRepository.reviewAllByProdNum(prodNum);
         List<ReviewPrintDTO> review = results.stream()
-                                             .map(result -> new ReviewPrintDTO(
-                                                     (String) result[0], // revNum
-                                                     (String) result[1], // memNum
-                                                     (Integer) result[2], // revStar
-                                                     (String) result[3], // revCont
-                                                     (String) result[4] // memName
-                                             ))
-                                             .collect(Collectors.toList());
+                .map(result -> new ReviewPrintDTO(
+                        (String) result[0], // revNum
+                        (String) result[1], // memNum
+                        (Integer) result[2], // revStar
+                        (String) result[3], // revCont
+                        (String) result[4] // memName
+                ))
+                .collect(Collectors.toList());
 
         return review;
     }
@@ -114,10 +118,10 @@ public class MainServiceImpl implements MainService {
         List<Object[]> payment = paymentRepository.paymentAllByMember(memNum);
 
         List<PaymentPrintDTO> dtoList = payment.stream()
-                                               .map(result -> new PaymentPrintDTO(
-                                                    (String) result[0],  // payNum
-                                                    (String) result[1])) // payCard
-                                               .collect(Collectors.toList());
+                .map(result -> new PaymentPrintDTO(
+                        (String) result[0], // payNum
+                        (String) result[1])) // payCard
+                .collect(Collectors.toList());
         return dtoList;
     }
 
@@ -131,5 +135,23 @@ public class MainServiceImpl implements MainService {
             return "payment insert success";
         }
         return "payment insert fail";
+    }
+
+    @Override
+    public String subscriptionInsert(SubscriptionDTO dto) {
+        int result = subscriptionRepository.subscriptionInsert(dto.getSubPer(),
+                dto.getSubStart(),
+                dto.getSubDeli(),
+                dto.getSubStat(),
+                dto.getSubUpd(),
+                dto.getSubCnt(),
+                dto.getMemNum(),
+                dto.getProdNum(),
+                dto.getPayNum());
+
+        if (result == 1) {
+            return "subscription insert success";
+        }
+        return "subscription insert fail";
     }
 }

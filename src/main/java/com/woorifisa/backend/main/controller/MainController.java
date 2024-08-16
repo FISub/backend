@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
+import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
@@ -112,9 +113,20 @@ public class MainController {
         String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
 
         dto.setMemNum(memNum);
-        System.out.println(dto);
         return mainService.insertCard(dto);
     }
+
+    // 구독하기
+    @PostMapping("/subscriptionInsert")
+    @Operation(summary = "구독하기 추가 (개발중)", description = "로그인한 회원정보와 결제정보, 상품정보로 구독")
+    public String subscriptionInsert(@RequestBody SubscriptionDTO dto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
+
+        dto.setMemNum(memNum);
+        return mainService.subscriptionInsert(dto);
+    }
+    
 
     @ExceptionHandler
     public String noProduct(NoProductException e){
