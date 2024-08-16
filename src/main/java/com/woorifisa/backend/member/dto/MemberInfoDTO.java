@@ -1,6 +1,7 @@
 package com.woorifisa.backend.member.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class MemberInfoDTO {
     private String memEmail;
     private String memPhone;
     private String memSex;
-    private Date memBirth;
+    private LocalDate memBirth;
     private String memAddr;
     private int memType;
 }

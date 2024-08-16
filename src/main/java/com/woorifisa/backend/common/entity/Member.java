@@ -1,6 +1,6 @@
 package com.woorifisa.backend.common.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -33,7 +33,7 @@ public class Member {
     @NotNull
     private String memSex;
     @NotNull
-    private Date memBirth;
+    private LocalDate memBirth;
     @NotNull
     private String memAddr;
     @NotNull

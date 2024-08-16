@@ -3,6 +3,7 @@ package com.woorifisa.backend.main.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -127,6 +128,11 @@ public class MainController {
         return mainService.subscriptionInsert(dto);
     }
     
+    // 매일 자정에 구독 테이블 update
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updateSubscriptionStatus(){
+        mainService.updateSubscriptionStatus();
+    }
 
     @ExceptionHandler
     public String noProduct(NoProductException e){

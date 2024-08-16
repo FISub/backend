@@ -1,12 +1,13 @@
 package com.woorifisa.backend.common.repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 import com.woorifisa.backend.common.entity.Member;
 
 
@@ -33,7 +34,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             @Param("phone") String phone,
             @Param("sex") String sex,
             @Param("addr") String addr,
-            @Param("birth") Date birth,
+            @Param("birth") LocalDate birth,
             @Param("type") int type);
 
     @Modifying
@@ -45,7 +46,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                         @Param("memEmail") String memEmail,
                         @Param("memPhone") String memPhone,
                         @Param("memSex") String memSex,
-                        @Param("memBirth") Date memBirth,
+                        @Param("memBirth") LocalDate memBirth,
                         @Param("memAddr") String memAddr,
                         @Param("memType") int memType);
 

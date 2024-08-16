@@ -22,4 +22,5 @@ public interface MainService {
     public List<PaymentPrintDTO> paymentAllByMember(String memNum);
     public String insertCard(PaymentInsertDTO dto);
     public String subscriptionInsert(SubscriptionDTO dto);
+    public void updateSubscriptionStatus();
 }

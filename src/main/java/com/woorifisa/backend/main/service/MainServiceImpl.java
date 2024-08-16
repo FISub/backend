@@ -1,5 +1,6 @@
 package com.woorifisa.backend.main.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -154,5 +155,20 @@ public class MainServiceImpl implements MainService {
             return "subscription insert success";
         }
         return "subscription insert fail";
+    }
+
+    @Override
+    @Transactional
+    public void updateSubscriptionStatus() {
+        LocalDate today = LocalDate.now();
+
+        // 배송중으로 변경
+        subscriptionRepository.updateToInDelivery(today); // 현재 날짜
+
+        // 배송완료로 변경
+        subscriptionRepository.updateToDeliveryCompleted(today, today.minusDays(2)); // 현재 날짜, 2일 전 날짜
+
+        // 대기중으로 변경
+        subscriptionRepository.updateToWaiting(today, today.minusDays(1));  // 현재 날짜, 1일 전 날짜
     }
 }
