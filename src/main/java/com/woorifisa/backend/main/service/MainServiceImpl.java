@@ -138,6 +138,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
+    @Transactional
     public String subscriptionInsert(SubscriptionDTO dto) {
         int result = subscriptionRepository.subscriptionInsert(dto.getSubPer(),
                 dto.getSubStart(),
