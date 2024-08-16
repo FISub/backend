@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
+import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
@@ -20,4 +21,5 @@ public interface MainService {
     public ReviewPrintDTO reviewInsert(ReviewDTO dto);
     public List<PaymentPrintDTO> paymentAllByMember(String memNum);
     public String insertCard(PaymentInsertDTO dto);
+    public String subscriptionInsert(SubscriptionDTO dto);
 }

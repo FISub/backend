@@ -1,6 +1,4 @@
-package com.woorifisa.backend.common.dto;
-
-
+package com.woorifisa.backend.member.dto;
 
 import java.util.Date;
 
@@ -17,10 +15,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-public class SubscriptionDTO {
+public class SubscriptionResponseDTO {
     private String subNum;
     private int subPer;
-    private Date subStart;
+    private Date subStart; 
     private Date subDeli;
     private int subStat;
     private Date subUpd;
@@ -28,4 +26,5 @@ public class SubscriptionDTO {
     private String memNum;
     private String prodNum;
     private String payNum;
+    private String imgURL;
 }

@@ -13,10 +13,14 @@ import com.woorifisa.backend.common.entity.Subscription;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<com.woorifisa.backend.common.entity.Subscription, String>{
 
+    List<Subscription> findByMemNum(Member member);
+    
+    // main ----------------------------------------------------------------------------------------------------------------------------
+
     @Modifying
     @Query(value = "insert into subscription(sub_per, sub_start, sub_deli, sub_stat, sub_upd, sub_cnt, mem_num, prod_num, pay_num)" 
                     +"values(:subPer, :subStart, :subDeli, :subStat, :subUpd, :subCnt, :memNum, :prodNum, :payNum)", nativeQuery = true)
-    public int insertSub(@Param("subPer") int subPer,
+    public int subscriptionInsert(@Param("subPer") int subPer,
                          @Param("subStart") Date subStart,
                          @Param("subDeli") Date subDeli,
                          @Param("subStat") int subStat,
@@ -27,5 +31,4 @@ public interface SubscriptionRepository extends JpaRepository<com.woorifisa.back
                          @Param("payNum") String payNum);
 
 
-    List<Subscription> findByMemNum(Member member);
 }

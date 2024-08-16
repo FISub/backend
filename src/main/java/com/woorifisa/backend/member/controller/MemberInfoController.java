@@ -2,24 +2,23 @@ package com.woorifisa.backend.member.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.common.exception.SessionNotValidException;
 import com.woorifisa.backend.member.dto.LoginSessionDTO;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
+import com.woorifisa.backend.member.dto.SubscriptionResponseDTO;
 import com.woorifisa.backend.member.service.AuthService;
 import com.woorifisa.backend.member.service.MemberInfoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -60,7 +59,7 @@ public class MemberInfoController {
     
     @GetMapping("/sublist/get")
     @Operation(summary = "유저 구독 정보 조회 (개발 완료)", description = "user 로그인 정보 검증 후 정보 수정")
-    public List<SubscriptionDTO> getSubList(HttpServletRequest request) throws Exception {
+    public List<SubscriptionResponseDTO> getSubList(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         if (authService.isValidSession(session)){
             return memberInfoService.getSubList(session);
