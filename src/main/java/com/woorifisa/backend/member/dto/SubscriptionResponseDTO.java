@@ -27,4 +27,5 @@ public class SubscriptionResponseDTO {
     private String prodNum;
     private String payNum;
     private String imgURL;
+    private String prodName;
 }

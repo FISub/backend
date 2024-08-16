@@ -12,4 +12,5 @@ public interface MemberInfoService {
     public MemberInfoDTO getMemberInfo(String memId);
     public String updateMemberInfo(MemberInfoDTO memberInfoDTO, String memNum);
     public List<SubscriptionResponseDTO> getSubList(HttpSession session) throws Exception;
+    public String deleteSub(String subNum) throws Exception;
 } 

@@ -73,8 +73,20 @@ public class MemberInfoServiceImpl implements MemberInfoService{
             throw new NoDataExsistException("구독 정보가 존재하지 않습니다.");
         }
         return subList.stream()
-            .map(sub -> new SubscriptionResponseDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg()))
+            .map(sub -> new SubscriptionResponseDTO(sub.getSubNum(), sub.getSubPer(), sub.getSubStart(), sub.getSubDeli(), sub.getSubStat(), sub.getSubUpd(), sub.getSubCnt(), member.getMemNum(), sub.getProdNum().getProdNum(), sub.getPayNum().getPayNum(), sub.getProdNum().getProdImg(), sub.getProdNum().getProdName()))
             .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public String deleteSub(String subNum) throws Exception{
+        try {
+            System.out.println("전달 받은 번호" + subNum);
+            subscriptionRepository.deleteSubById(subNum);
+            return "삭제 완료";
+        } catch (Exception e) {
+            throw new Exception("구독을 삭제하는 중 오류가 발생했습니다.");
+        }
     }
     
     
