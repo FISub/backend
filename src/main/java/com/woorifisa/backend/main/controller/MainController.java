@@ -1,6 +1,7 @@
 package com.woorifisa.backend.main.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -117,9 +118,23 @@ public class MainController {
         return mainService.insertCard(dto);
     }
 
+    // 리뷰 삭제
+    @PostMapping("/reviewDelete")
+    @Operation(summary = "리뷰 삭제 (개발 완료 )", description = "rev_num과 mem_num으로 리뷰 삭제")
+    public String reviewDelete(@RequestBody Map<String, Object> reqMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
+        int memType =((LoginSessionDTO) session.getAttribute("login")).getMemType();
+        reqMap.put("memNum", memNum);
+        reqMap.put("memType", memType);
+
+        return mainService.reviewDelete(reqMap);
+    }
+    
+
     // 구독하기
     @PostMapping("/subscriptionInsert")
-    @Operation(summary = "구독하기 추가 (개발중)", description = "로그인한 회원정보와 결제정보, 상품정보로 구독")
+    @Operation(summary = "구독하기 추가 (개발 완료)", description = "로그인한 회원정보와 결제정보, 상품정보로 구독")
     public String subscriptionInsert(@RequestBody SubscriptionDTO dto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
