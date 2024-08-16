@@ -30,5 +30,7 @@ public interface SubscriptionRepository extends JpaRepository<com.woorifisa.back
                          @Param("prodNum") String prodNum,
                          @Param("payNum") String payNum);
 
-
+    @Modifying
+    @Query(value = "DELETE FROM subscription WHERE sub_num = :subNum", nativeQuery = true)
+    public int deleteSubById(@Param("subNum") String subNum);                
 }

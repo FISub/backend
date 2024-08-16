@@ -3,10 +3,12 @@ package com.woorifisa.backend.member.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.woorifisa.backend.common.exception.SessionNotValidException;
@@ -66,7 +68,17 @@ public class MemberInfoController {
         } else {
             throw new SessionNotValidException("로그인 후 이용해 주세요");
         }
-        
+    }
+
+    @DeleteMapping("/sublist/delete")
+    @Operation(summary = "구독 취소 (개발 완료)", description = "member의 상품 구독 취소")
+    public String deleteSub(@RequestParam("subNum") String subNum, HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        if (authService.isValidSession(session)){
+            return memberInfoService.deleteSub(subNum);
+        } else {
+            throw new SessionNotValidException("로그인 후 이용해 주세요");
+        }
     }
     
 }
