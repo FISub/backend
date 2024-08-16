@@ -2,7 +2,7 @@ package com.woorifisa.backend.common.dto;
 
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +20,10 @@ import lombok.ToString;
 public class SubscriptionDTO {
     private String subNum;
     private int subPer;
-    private Date subStart;
-    private Date subDeli;
+    private LocalDate subStart;
+    private LocalDate subDeli;
     private int subStat;
-    private Date subUpd;
+    private LocalDate subUpd;
     private int subCnt;
     private String memNum;
     private String prodNum;

@@ -33,4 +33,14 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
     // 최신 리뷰를 가져오는 쿼리 메서드
     @Query(value = "select rev_num, r.mem_num, rev_star, rev_cont, m.mem_name from review r join member m on r.mem_num= m.mem_num ORDER BY r.rev_num DESC limit 1", nativeQuery = true)
     public List<Object[]> findTopByOrderByRevNumDesc();
+
+    // 리뷰 삭제(관리자)
+    @Modifying
+    @Query(value = "delete from review where rev_num = :revNum", nativeQuery = true)
+    public int deleteByrevNum(@Param("revNum") String revNum);
+
+    // 리뷰 삭제(일반회원)
+    @Modifying
+    @Query(value = "delete from review where rev_num = :revNum and mem_num = :memNum and prod_num = :prodNum", nativeQuery = true)
+    public int deleteByIdMemNum(@Param("revNum") String revNum, @Param("memNum") String memNum, @Param("prodNum") String prodNum);
 }

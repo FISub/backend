@@ -1,6 +1,7 @@
 package com.woorifisa.backend.main.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -22,4 +23,6 @@ public interface MainService {
     public List<PaymentPrintDTO> paymentAllByMember(String memNum);
     public String insertCard(PaymentInsertDTO dto);
     public String subscriptionInsert(SubscriptionDTO dto);
+    public void updateSubscriptionStatus();
+    public String reviewDelete(Map<String, Object> reqMap);
 }

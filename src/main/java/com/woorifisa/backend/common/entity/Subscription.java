@@ -1,6 +1,6 @@
 package com.woorifisa.backend.common.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,11 +26,11 @@ public class Subscription {
     private String subNum;
     @NotNull
     private int subPer;
-    private Date subStart;
-    private Date subDeli;
+    private LocalDate subStart;
+    private LocalDate subDeli;
     @NotNull
     private int subStat;
-    private Date subUpd;
+    private LocalDate subUpd;
     private int subCnt;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

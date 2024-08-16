@@ -1,6 +1,8 @@
 package com.woorifisa.backend.main.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -138,6 +140,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
+    @Transactional
     public String subscriptionInsert(SubscriptionDTO dto) {
         int result = subscriptionRepository.subscriptionInsert(dto.getSubPer(),
                 dto.getSubStart(),
@@ -153,5 +156,39 @@ public class MainServiceImpl implements MainService {
             return "subscription insert success";
         }
         return "subscription insert fail";
+    }
+
+    @Override
+    @Transactional
+    public void updateSubscriptionStatus() {
+        LocalDate today = LocalDate.now();
+
+        // 배송중으로 변경
+        subscriptionRepository.updateToInDelivery(today); // 현재 날짜
+
+        // 배송완료로 변경
+        subscriptionRepository.updateToDeliveryCompleted(today, today.minusDays(2)); // 현재 날짜, 2일 전 날짜
+
+        // 대기중으로 변경
+        subscriptionRepository.updateToWaiting(today, today.minusDays(1));  // 현재 날짜, 1일 전 날짜
+    }
+
+    @Override
+    @Transactional
+    public String reviewDelete(Map<String, Object> reqMap) {       
+       int result = 0;
+
+        if((Integer)reqMap.get("memType") == 9){
+            result = reviewRepository.deleteByrevNum((String)reqMap.get("revNum"));
+            return "review delete success";       
+        } else{
+            result = reviewRepository.deleteByIdMemNum((String)reqMap.get("revNum"), (String)reqMap.get("memNum"), (String)reqMap.get("prodNum"));
+
+            if(result == 1){
+                return "review delete success";
+            } else{
+                return "review delete fail";
+            }
+        }  
     }
 }
