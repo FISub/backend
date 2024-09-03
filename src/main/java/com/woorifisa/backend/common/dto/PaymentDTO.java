@@ -20,4 +20,5 @@ public class PaymentDTO {
     private String payExp;
     private int payCvc;
     private int payPw;
+    private String payBillingKey;
 }
