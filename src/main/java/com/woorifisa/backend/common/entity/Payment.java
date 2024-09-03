@@ -34,4 +34,6 @@ public class Payment {
     private int payCvc;
     @NotNull
     private int payPw;
+    @NotNull
+    private String payBillingKey;
 }

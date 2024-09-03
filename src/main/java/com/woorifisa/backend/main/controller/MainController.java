@@ -1,5 +1,9 @@
 package com.woorifisa.backend.main.controller;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
-import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
@@ -109,12 +113,25 @@ public class MainController {
 
     // 결제 정보 추가
     @PostMapping("/paymentInsert")
-    @Operation(summary = "결제방식 추가 (개발완료)", description = "결제 방식 추가")
-    public String insertCard(@RequestBody PaymentInsertDTO dto, HttpServletRequest request) {
+    @Operation(summary = "결제방식 추가 및 토스 빌링키 발급 (수정 중)", description = "결제 방식 추가")
+    public int insertCard(@RequestBody PaymentDTO dto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+
+        Date memBirth_date = mainService.getMemBirth(memNum);
+        LocalDate memBirth_localDate = memBirth_date.toInstant()
+                                          .atZone(ZoneId.systemDefault())
+                                          .toLocalDate();
+
+        String memBirth = (memBirth_localDate).format(formatter);
+
+        String billingKey = mainService.getBillingKey(dto.getPayCard(), dto.getPayExp(), memNum, memBirth);
+
         dto.setMemNum(memNum);
+        dto.setPayBillingKey(billingKey);
+
         return mainService.insertCard(dto);
     }
 
