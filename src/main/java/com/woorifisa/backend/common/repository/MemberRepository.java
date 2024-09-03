@@ -1,6 +1,7 @@
 package com.woorifisa.backend.common.repository;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -50,5 +51,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                         @Param("memAddr") String memAddr,
                         @Param("memType") int memType);
 
-        
+        //Toss
+        @Query(value = "SELECT mem_birth FROM member  WHERE mem_num = :memNum", nativeQuery = true)
+        Date findMemBirthByMemNum(String memNum);
 }
