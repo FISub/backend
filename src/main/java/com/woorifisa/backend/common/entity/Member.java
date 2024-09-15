@@ -2,6 +2,8 @@ package com.woorifisa.backend.common.entity;
 
 import java.time.LocalDate;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -38,4 +40,11 @@ public class Member {
     private String memAddr;
     @NotNull
     private int memType;
+
+
+
+    // 입력된 평문형식의 pw와 db에 저장된 암호화된 pw 비교
+    public boolean checkPassword(String plainPassword, PasswordEncoder passwordEncoder) {
+    return passwordEncoder.matches(plainPassword, this.memPw);
+  }
 }

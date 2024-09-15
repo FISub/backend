@@ -2,6 +2,7 @@ package com.woorifisa.backend.member.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     private ModelMapper mapper = new ModelMapper(); 
 
     @Override
@@ -31,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
         Member member = memberRepository.findByMemId(id);
         System.out.println(member);
         if (member != null) {
-            if (pw.equals(member.getMemPw())) {
+            if (member.checkPassword(pw, passwordEncoder)) {
                 LoginSessionDTO login = mapper.map(member, LoginSessionDTO.class);
                 System.out.println(login);
                 HttpSession session = request.getSession();
@@ -64,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         try{
-            memberRepository.insertMem(memberInfoDTO.getMemName(), memberInfoDTO.getMemId(), memberInfoDTO.getMemPw(), 
+            memberRepository.insertMem(memberInfoDTO.getMemName(), memberInfoDTO.getMemId(), passwordEncoder.encode(memberInfoDTO.getMemPw()), 
                                        memberInfoDTO.getMemEmail(), memberInfoDTO.getMemPhone(), memberInfoDTO.getMemSex(), 
                                        memberInfoDTO.getMemAddr(), memberInfoDTO.getMemBirth(), memberInfoDTO.getMemType());
         } catch (Exception e) {
