@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.json:json:20210307'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 // 기본 로깅 도구 Logback을 의존성에서 제거
