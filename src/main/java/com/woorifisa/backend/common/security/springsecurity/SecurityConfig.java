@@ -1,10 +1,12 @@
 package com.woorifisa.backend.common.security.springsecurity;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -12,11 +14,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    // 대칭키
-    /* 
-    @Value("${symmetric.key}")
-    private String symmetrickey;
-    */
+
+    @Value("${encryption.password.key}")
+    private String passwordKey;
+
+    @Value("${encryption.salt}")
+    private String salt;
 
     // PasswordEncoder interface의 구현체가 BCryptPasswordEncoder임을 수동 빈 등록을 통해 명시
     // 이를 통해 의존성을 주입 받아 사용 가능
@@ -24,14 +27,13 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    /* 
+    
     // AesBytesEncryptor 사용을 위한 Bean등록
     @Bean
     AesBytesEncryptor aesBytesEncryptor() {
-        return new AesBytesEncryptor(symmetrickey,"70726574657374");
+        return new AesBytesEncryptor(passwordKey, salt);
     }
-        */
-   
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

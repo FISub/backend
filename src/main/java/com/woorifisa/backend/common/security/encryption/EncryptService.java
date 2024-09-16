@@ -1,23 +1,26 @@
 package com.woorifisa.backend.common.security.encryption;
 
-import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
-import java.nio.charset.StandardCharsets;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 
-
+@Service
 @RequiredArgsConstructor
 public class EncryptService {
     private final AesBytesEncryptor encryptor;
 
 	// 암호화
-    public String encryptEmail(String email) {
-        byte[] encrypt = encryptor.encrypt(email.getBytes(StandardCharsets.UTF_8));
+    public String encryptBillingKey(String billingKey) {
+        byte[] encrypt = encryptor.encrypt(billingKey.getBytes(StandardCharsets.UTF_8));
         return byteArrayToString(encrypt);
     }
 	
     // 복호화
-    public String decryptEmail(String encryptString) {
+    public String decryptBillingKey(String encryptString) {
         byte[] decryptBytes = stringToByteArray(encryptString);
         byte[] decrypt = encryptor.decrypt(decryptBytes);
         return new String(decrypt, StandardCharsets.UTF_8);
