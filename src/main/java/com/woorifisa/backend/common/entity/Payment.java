@@ -29,11 +29,7 @@ public class Payment {
     @NotNull
     private String payCard;
     @NotNull
-    private String payExp;
-    @NotNull
-    private int payCvc;
-    @NotNull
-    private int payPw;
-    @NotNull
     private String payBillingKey;
+    @NotNull
+    private String payBrand;
 }

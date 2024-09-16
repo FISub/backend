@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
@@ -27,6 +27,7 @@ import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.ReviewRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
+import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
@@ -148,16 +149,9 @@ public class MainServiceImpl implements MainService {
 
     @Override
     @Transactional
-    public int insertCard(PaymentDTO dto) {
-        int result = 0;
-        if (!dto.getPayBillingKey().equals("")) {
-            result = paymentRepository.insertCard(dto.getMemNum(), dto.getPayCard(), dto.getPayExp(),
-                    dto.getPayCvc(), dto.getPayPw(), dto.getPayBillingKey());
-        }
-        if (result == 1) {
-            return 1;
-        }
-        return 0;
+    public int insertCard(PaymentInsertDTO dto) {
+        int result = paymentRepository.insertCard(dto.getMemNum(), dto.getPayCard(), dto.getPayBillingKey(), dto.getPayBrand());
+        return result == 1 ? 1 : 0;
     }
 
     @Override
@@ -221,7 +215,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public String getBillingKey(String card, String exp, String memNum, String memBirth) {
+    public Map<String, String> getBillingKey(String card, String exp, String memNum, String memBirth) {
         String expMonth = exp.split("/")[0];
         String expYear = exp.split("/")[1];
 
@@ -247,13 +241,17 @@ public class MainServiceImpl implements MainService {
             JSONObject jsonRes = new JSONObject(response.body());
 
             if (jsonRes.has("billingKey")) {
-                return jsonRes.getString("billingKey");
+                Map<String, String> map = new HashMap<String,String>();
+                map.put("billingKey", jsonRes.getString("billingKey"));
+                map.put("card", jsonRes.getString("cardNumber"));
+                map.put("brand", jsonRes.getString("cardCompany"));
+                return map;
             } else {
-                return "";
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "";
+            return null;
         }
     }
 }

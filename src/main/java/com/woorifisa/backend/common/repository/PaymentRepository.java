@@ -19,12 +19,10 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
     public List<Object[]> paymentAllByMember(@Param("memNum") String memNum);
 
     @Modifying
-    @Query(value= "insert into payment(mem_num, pay_card, pay_exp, pay_cvc, pay_pw, pay_billingKey) values(:memNum, :card, :exp, :cvc, :pw, :billingKey)", nativeQuery = true)
+    @Query(value= "insert into payment(mem_num, pay_card, pay_billingKey, pay_brnad) values(:memNum, :card, :billingKey, :brand)", nativeQuery = true)
     public int insertCard(@Param("memNum") String memNum,
-                              @Param("card") String card,
-                              @Param("exp") String exp,
-                              @Param("cvc") int cvc,
-                              @Param("pw") int pw,
-                              @Param("billingKey") String billingKey);
+                          @Param("card") String card,
+                          @Param("billingKey") String billingKey,
+                          @Param("brand") String brand);
 
 }
