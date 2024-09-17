@@ -14,9 +14,8 @@ import lombok.ToString;
 @Setter
 @Builder
 public class PaymentInsertDTO {
-    private String payCard;
-    private String payExp;
-    private int payCvc;
-    private int payPw;
     private String memNum;
+    private String payCard;
+    private String payBrand;
+    private String payBillingKey;
 }

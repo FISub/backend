@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.woorifisa.backend.common.dto.PaymentDTO;
 import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
+import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.common.security.encryption.EncryptService;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
@@ -118,7 +118,7 @@ public class MainController {
     // 결제 정보 추가
     @PostMapping("/paymentInsert")
     @Operation(summary = "결제방식 추가 및 토스 빌링키 발급 (수정 중)", description = "결제 방식 추가")
-    public int insertCard(@RequestBody PaymentDTO dto, HttpServletRequest request) {
+    public int insertCard(@RequestBody Map<String, Object> reqMap, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
 
@@ -136,12 +136,19 @@ public class MainController {
 
         String memBirth = (memBirth_localDate).format(formatter);
 
-        String billingKey = mainService.getBillingKey(dto.getPayCard(), dto.getPayExp(), memNum, memBirth);
-        String encryptedBillingKey = encryptService.encryptBillingKey(billingKey);  // 암호화 적용된 빌링키
+        Map<String, String> map = mainService.getBillingKey((String)reqMap.get("payCard"), (String)reqMap.get("payExp"), memNum, memBirth);
+        
+        if(map == null){
+            return 0;
+        }
 
+        String encryptedBillingKey = encryptService.encryptBillingKey(map.get("billingKey"));  // 암호화 적용된 빌링키
+        
+        PaymentInsertDTO dto = new PaymentInsertDTO();
         dto.setMemNum(memNum);
         dto.setPayBillingKey(encryptedBillingKey);
-        // dto.setPayBillingKey(billingKey);
+        dto.setPayBrand(map.get("brand"));
+        dto.setPayCard(map.get("card"));
 
         return mainService.insertCard(dto);
     }

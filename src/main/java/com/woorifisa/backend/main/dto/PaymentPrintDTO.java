@@ -16,4 +16,5 @@ import lombok.ToString;
 public class PaymentPrintDTO {
     private String payNum;
     private String payCard;
+    private String payBrand;
 }

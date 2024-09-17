@@ -17,8 +17,6 @@ public class PaymentDTO {
     private String payNum;
     private String memNum;
     private String payCard;
-    private String payExp;
-    private int payCvc;
-    private int payPw;
     private String payBillingKey;
+    private String payBrand;
 }
