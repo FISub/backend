@@ -53,5 +53,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
         //Toss
         @Query(value = "SELECT mem_birth FROM member  WHERE mem_num = :memNum", nativeQuery = true)
-        Date findMemBirthByMemNum(String memNum);
+        Date findMemBirthByMemNum(@Param("memNum") String memNum);
 }
