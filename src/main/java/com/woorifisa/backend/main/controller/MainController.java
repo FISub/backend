@@ -121,6 +121,10 @@ public class MainController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
 
         Date memBirth_date = mainService.getMemBirth(memNum);
+        if(memBirth_date instanceof java.sql.Date){
+            memBirth_date = new java.util.Date(memBirth_date.getTime());
+        }
+        
         LocalDate memBirth_localDate = memBirth_date.toInstant()
                                           .atZone(ZoneId.systemDefault())
                                           .toLocalDate();
@@ -138,7 +142,11 @@ public class MainController {
         dto.setPayBillingKey(map.get("billingKey"));
         dto.setPayBrand(map.get("brand"));
         dto.setPayCard(map.get("card"));
-        
+
+        System.out.println(map.get("billingKey"));
+        System.out.println(map.get("brand"));
+        System.out.println(map.get("card"));
+
         return mainService.insertCard(dto);
     }
 

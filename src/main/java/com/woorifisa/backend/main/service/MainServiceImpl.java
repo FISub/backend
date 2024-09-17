@@ -56,7 +56,7 @@ public class MainServiceImpl implements MainService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
     @Autowired
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
     @Override
     @Transactional
@@ -142,7 +142,8 @@ public class MainServiceImpl implements MainService {
         List<PaymentPrintDTO> dtoList = payment.stream()
                 .map(result -> new PaymentPrintDTO(
                         (String) result[0], // payNum
-                        (String) result[1])) // payCard
+                        (String) result[1],// payCard
+                        (String) result[2])) // payBrand
                 .collect(Collectors.toList());
         return dtoList;
     }
