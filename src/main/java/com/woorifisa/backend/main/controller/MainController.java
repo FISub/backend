@@ -22,6 +22,7 @@ import com.woorifisa.backend.common.dto.ProductDTO;
 import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.main.dto.PaymentInsertDTO;
+import com.woorifisa.backend.common.security.encryption.EncryptService;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
@@ -42,6 +43,9 @@ public class MainController {
 
     @Autowired
     private MainService mainService;
+
+    @Autowired
+    private EncryptService encryptService;
 
     // main 상품 미리보기
     @GetMapping("/productPreview")
@@ -119,12 +123,13 @@ public class MainController {
         String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-
+        
         Date memBirth_date = mainService.getMemBirth(memNum);
-        if(memBirth_date instanceof java.sql.Date){
+
+        if (memBirth_date instanceof java.sql.Date) {  // memBirth_date가 java.sql.Date일 경우 java.util.Date로 변환
             memBirth_date = new java.util.Date(memBirth_date.getTime());
         }
-        
+
         LocalDate memBirth_localDate = memBirth_date.toInstant()
                                           .atZone(ZoneId.systemDefault())
                                           .toLocalDate();
@@ -132,20 +137,18 @@ public class MainController {
         String memBirth = (memBirth_localDate).format(formatter);
 
         Map<String, String> map = mainService.getBillingKey((String)reqMap.get("payCard"), (String)reqMap.get("payExp"), memNum, memBirth);
-
+        
         if(map == null){
             return 0;
         }
 
+        String encryptedBillingKey = encryptService.encryptBillingKey(map.get("billingKey"));  // 암호화 적용된 빌링키
+        
         PaymentInsertDTO dto = new PaymentInsertDTO();
         dto.setMemNum(memNum);
-        dto.setPayBillingKey(map.get("billingKey"));
+        dto.setPayBillingKey(encryptedBillingKey);
         dto.setPayBrand(map.get("brand"));
         dto.setPayCard(map.get("card"));
-
-        System.out.println(map.get("billingKey"));
-        System.out.println(map.get("brand"));
-        System.out.println(map.get("card"));
 
         return mainService.insertCard(dto);
     }
