@@ -1,26 +1,15 @@
 package com.woorifisa.backend.member.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.woorifisa.backend.member.dto.LoginRequestDTO;
-import com.woorifisa.backend.member.dto.LoginResponseDTO;
-import com.woorifisa.backend.member.dto.LoginSessionDTO;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
 import com.woorifisa.backend.member.exception.JoinException;
-import com.woorifisa.backend.member.exception.LoginException;
 import com.woorifisa.backend.member.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
 
 @RequestMapping("/auth")
 @RestController
