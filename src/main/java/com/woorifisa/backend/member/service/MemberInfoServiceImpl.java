@@ -53,6 +53,7 @@ public class MemberInfoServiceImpl implements MemberInfoService{
     @Override
     public String updateMemberInfo(MemberInfoDTO memberInfoDTO, String memNum) {
         try {
+            System.out.println(memberInfoDTO);
             memberRepository.updateMemberInfo(memNum, memberInfoDTO.getMemId(), memberInfoDTO.getMemPw(),memberInfoDTO.getMemName(), memberInfoDTO.getMemEmail(),memberInfoDTO.getMemPhone(),memberInfoDTO.getMemSex(),memberInfoDTO.getMemBirth(),memberInfoDTO.getMemAddr(),memberInfoDTO.getMemType());
             return "수정 성공";
         } catch (Exception e) {
@@ -61,9 +62,8 @@ public class MemberInfoServiceImpl implements MemberInfoService{
     }
 
     @Override
-    public List<SubscriptionResponseDTO> getSubList(HttpSession session) throws Exception {
-        LoginSessionDTO sessionDTO = (LoginSessionDTO) session.getAttribute("login");
-        Member member = memberRepository.findById(sessionDTO.getMemNum()).orElse(null);
+    public List<SubscriptionResponseDTO> getSubList(String memNum) throws Exception {
+        Member member = memberRepository.findById(memNum).orElse(null);
         if (member == null){
             throw new NoDataExsistException("로그인 세션에 해당하는 user가 존재하지 않습니다.");
         }

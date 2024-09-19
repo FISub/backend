@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.woorifisa.backend.common.dto.ReviewDTO;
 import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.main.dto.PaymentInsertDTO;
 import com.woorifisa.backend.common.security.encryption.EncryptService;
+import com.woorifisa.backend.common.security.springsecurity.MemberDetail;
 import com.woorifisa.backend.main.dto.PaymentPrintDTO;
 import com.woorifisa.backend.main.dto.ReviewPrintDTO;
 import com.woorifisa.backend.main.exception.NoProductException;
@@ -96,31 +98,24 @@ public class MainController {
     @PostMapping("/reviewInsert")
     @Operation(summary = "상품에 대한 review insert (개발 완료 - 예외처리 고민중, builder방식으로 변경할지 고민/토론)",
                 description = "prod_num과 session에 저장된 mem_num으로 review insert")
-    public ReviewPrintDTO reviewInsert(@RequestBody ReviewDTO dto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
-        dto.setMemNum(memNum);
-
+    public ReviewPrintDTO reviewInsert(@RequestBody ReviewDTO dto,  @AuthenticationPrincipal MemberDetail memberDetail) { 
+        dto.setMemNum(memberDetail.getMemNum());
         return mainService.reviewInsert(dto);
     }
 
     // 결제 정보list 출력
     @GetMapping("/paymentAllByMember")
     @Operation(summary = "결제방식 출력 (개발완료)", description = "memNum값으로 결제list 출력")
-    public List<PaymentPrintDTO> paymentAllByMember(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
-
-        return mainService.paymentAllByMember(memNum);
+    public List<PaymentPrintDTO> paymentAllByMember(@AuthenticationPrincipal MemberDetail memberDetail) {
+        return mainService.paymentAllByMember(memberDetail.getMemNum());
     }
     
 
     // 결제 정보 추가
     @PostMapping("/paymentInsert")
     @Operation(summary = "결제방식 추가 및 토스 빌링키 발급 (수정 중)", description = "결제 방식 추가")
-    public int insertCard(@RequestBody Map<String, Object> reqMap, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
+    public int insertCard(@RequestBody Map<String, Object> reqMap, @AuthenticationPrincipal MemberDetail memberDetail) {
+        String memNum = memberDetail.getMemNum();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         
@@ -156,13 +151,9 @@ public class MainController {
     // 리뷰 삭제
     @PostMapping("/reviewDelete")
     @Operation(summary = "리뷰 삭제 (개발 완료 )", description = "rev_num과 mem_num으로 리뷰 삭제")
-    public String reviewDelete(@RequestBody Map<String, Object> reqMap, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
-        int memType =((LoginSessionDTO) session.getAttribute("login")).getMemType();
-        reqMap.put("memNum", memNum);
-        reqMap.put("memType", memType);
-
+    public String reviewDelete(@RequestBody Map<String, Object> reqMap, @AuthenticationPrincipal MemberDetail memberDetail) {
+        reqMap.put("memNum", memberDetail.getMemNum());
+        reqMap.put("memType",memberDetail.getMemType());
         return mainService.reviewDelete(reqMap);
     }
     
@@ -170,10 +161,8 @@ public class MainController {
     // 구독하기
     @PostMapping("/subscriptionInsert")
     @Operation(summary = "구독하기 추가 (개발 완료)", description = "로그인한 회원정보와 결제정보, 상품정보로 구독")
-    public String subscriptionInsert(@RequestBody SubscriptionDTO dto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
-
+    public String subscriptionInsert(@RequestBody SubscriptionDTO dto, @AuthenticationPrincipal MemberDetail memberDetail) {
+        String memNum = memberDetail.getMemNum();
         dto.setMemNum(memNum);
 
         // 조회수 log 남기기

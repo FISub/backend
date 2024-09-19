@@ -2,19 +2,15 @@ package com.woorifisa.backend.product.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-
 import com.woorifisa.backend.common.dto.ProductDTO;
-import com.woorifisa.backend.member.dto.LoginSessionDTO;
+import com.woorifisa.backend.common.security.springsecurity.MemberDetail;
 import com.woorifisa.backend.product.service.ProductService;
 
 
@@ -49,11 +45,8 @@ public class ProductController {
 
     @GetMapping("/productAllBiz")
     @Operation(summary = "상품 조회", description = "로그인한 사업자가 등록한 상품을 조회합니다.")
-    public List<ProductDTO> productAllBiz(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String memNum = ((LoginSessionDTO) session.getAttribute("login")).getMemNum();
-
-        return productService.productAll(memNum);
+    public List<ProductDTO> productAllBiz(@AuthenticationPrincipal MemberDetail memberDetail) {
+        return productService.productAll(memberDetail.getMemNum());
     }
     
 }
