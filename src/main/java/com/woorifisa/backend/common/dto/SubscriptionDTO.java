@@ -28,4 +28,5 @@ public class SubscriptionDTO {
     private String memNum;
     private String prodNum;
     private String payNum;
+    private String subPaymentKey;
 }

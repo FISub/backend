@@ -44,4 +44,6 @@ public class Subscription {
     @ManyToOne
     @JoinColumn(name = "pay_num")
     private Payment payNum;
+    @NotNull
+    private String subPaymentKey;
 }
