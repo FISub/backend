@@ -90,8 +90,7 @@ public class SecurityConfig {
 
     private static final String[] AUTHENTICATED_URLS = 
         {  
-            "/auth/sessionInfo", 
-            "/admin/**", 
+            "/auth/sessionInfo",
             "/member/**",
             "/main/subscriptionInsert",
             "/main/reviewInsert/reviewInsert",
@@ -112,6 +111,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(requests -> requests
             .requestMatchers(AUTHENTICATED_URLS).authenticated()
+            .requestMatchers("/admin/**").hasRole("9")
             .requestMatchers("/products/**").hasAnyRole("2","9")
             .requestMatchers(SWAGGER_URLS).permitAll()
             .anyRequest().permitAll()
