@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.woorifisa.backend.common.entity.Product;
+import com.woorifisa.backend.subscription.dto.ProductPayDTO;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
@@ -62,4 +63,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     // biz 상품 전체보기
     @Query(value = "select * from product where mem_num = :memNum order by prod_num", nativeQuery = true)
     public List<Product> productAllBiz(@Param("memNum") String memNum);
+
+    // subscription ----------------------------------------------------------------------------------------------------------------------------------------------
+    @Query(value = "select prod_name, prod_price from product where prod_num = :prodNum", nativeQuery = true)
+    public ProductPayDTO findPayNameAndPayPrice(@Param("prodNum") String prodNum);
 }
