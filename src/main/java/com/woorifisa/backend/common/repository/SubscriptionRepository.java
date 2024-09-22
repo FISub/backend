@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.woorifisa.backend.common.dto.SubscriptionDTO;
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.entity.Subscription;
 
@@ -18,8 +17,9 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Stri
 
         List<Subscription> findByMemNum(Member member);
 
-        @Query(value = "SELECT * from subscription where sub_deli = :curDate", nativeQuery = true)
-        List<SubscriptionDTO> findByDeliveryDate(@Param("curDate") LocalDate curDate);
+        @Query(value = "SELECT sub_num, sub_per, sub_start, sub_deli, sub_stat, sub_upd, sub_cnt, mem_num, prod_num, pay_num, sub_paymentKey"
+                        + " from subscription where sub_deli = :curDate", nativeQuery = true)
+        List<Object[]> findByDeliveryDate(@Param("curDate") LocalDate curDate);
 
         @Modifying
         @Query(value = "UPDATE subscription SET sub_stat = 1, sub_deli = DATE_ADD(sub_deli, INTERVAL sub_per DAY), "
