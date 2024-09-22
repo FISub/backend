@@ -21,7 +21,7 @@
 
     <Loggers>
         <!-- 특정 패키지에 대한 로그 레벨 설정 -->
-        <Logger name="com.woorifisa.backend.main" level="info" additivity="false">
+        <Logger name="com.woorifisa.backend" level="info" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Logger>
