@@ -2,8 +2,10 @@ package com.woorifisa.backend.common.security.springsecurity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.woorifisa.backend.common.entity.Member;
 
@@ -17,14 +19,23 @@ public class MemberDetail implements UserDetails {
         this.member = member;
     }
 
+    
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-    ArrayList<GrantedAuthority> auths = new ArrayList<>();
-    for (int role : member.getMemTypeList()) {  // member.getMemTypeList()가 List<Integer>를 반환한다고 가정
-        auths.add((GrantedAuthority) () -> String.valueOf(role) // int 값을 String으로 변환
-        );
-    }
-    return auths;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        
+        // memType에 따라 역할을 다르게 설정
+        if (member.getMemType() == 1) {
+            authorities.add(new SimpleGrantedAuthority("1"));
+        } else if (member.getMemType() == 2) {
+            authorities.add(new SimpleGrantedAuthority("2"));
+        } else if (member.getMemType() == 9) {
+            authorities.add(new SimpleGrantedAuthority("9"));
+        }
+        // 추가적인 memType에 대한 조건 처리
+        
+        return authorities;
     }
 
     @Override

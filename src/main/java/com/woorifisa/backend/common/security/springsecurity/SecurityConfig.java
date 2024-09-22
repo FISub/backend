@@ -112,8 +112,8 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(requests -> requests
             .requestMatchers(AUTHENTICATED_URLS).authenticated()
-            .requestMatchers("/admin/**").hasRole("9")
-            .requestMatchers("/products/**").hasAnyRole("2","9")
+            .requestMatchers("/admin/**").hasAuthority("9")
+            .requestMatchers("/products/**", "/productAllBiz/**").hasAnyAuthority("2","9")
             .requestMatchers(SWAGGER_URLS).permitAll()
             .anyRequest().permitAll()
             )
