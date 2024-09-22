@@ -5,17 +5,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.entity.Subscription;
 import com.woorifisa.backend.common.exception.NoDataExsistException;
+import com.woorifisa.backend.common.exception.SessionNotValidException;
 import com.woorifisa.backend.common.repository.MemberRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
+import com.woorifisa.backend.member.dto.MemberInfoEditDTO;
 import com.woorifisa.backend.member.dto.SubscriptionResponseDTO;
+import com.woorifisa.backend.member.exception.NotValidPasswordException;
 
 
 
@@ -28,6 +32,8 @@ public class MemberInfoServiceImpl implements MemberInfoService{
     SubscriptionRepository subscriptionRepository;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public MemberInfoDTO getMemberInfo(String memId) {
@@ -40,7 +46,6 @@ public class MemberInfoServiceImpl implements MemberInfoService{
                                 .memId(member.getMemId())
                                 .memName(member.getMemName())
                                 .memPhone(member.getMemPhone())
-                                .memPw(member.getMemPw())
                                 .memSex(member.getMemSex())
                                 .memType(member.getMemType())
                                 .build();
@@ -48,10 +53,19 @@ public class MemberInfoServiceImpl implements MemberInfoService{
     
     @Transactional
     @Override
-    public String updateMemberInfo(MemberInfoDTO memberInfoDTO, String memNum) {
+    public String updateMemberInfo(MemberInfoEditDTO memberInfoEditDTO, String memNum) throws NotValidPasswordException, SessionNotValidException {
+        Member curMember = memberRepository.findByMemNum(memNum);
+        if (!curMember.checkPassword(memberInfoEditDTO.getMemPw(), passwordEncoder)){
+            throw new NotValidPasswordException("비밀번호가 올바르지 않습니다."); 
+        }
+        if (curMember.getMemId() != memberInfoEditDTO.getMemId()){
+            throw new SessionNotValidException("로그인 정보와 수정하고자 하는 user의 id가 일치하지 않습니다!");
+        }
+
         try {
-            System.out.println(memberInfoDTO);
-            memberRepository.updateMemberInfo(memNum, memberInfoDTO.getMemId(), memberInfoDTO.getMemPw(),memberInfoDTO.getMemName(), memberInfoDTO.getMemEmail(),memberInfoDTO.getMemPhone(),memberInfoDTO.getMemSex(),memberInfoDTO.getMemBirth(),memberInfoDTO.getMemAddr(),memberInfoDTO.getMemType());
+            memberRepository.updateMemberInfo(memNum,memberInfoEditDTO.getMemId(),memberInfoEditDTO.getMemPw(),memberInfoEditDTO.getMemName(), 
+                                              memberInfoEditDTO.getMemEmail(),memberInfoEditDTO.getMemPhone(),memberInfoEditDTO.getMemSex(),
+                                              memberInfoEditDTO.getMemBirth(),memberInfoEditDTO.getMemAddr(),memberInfoEditDTO.getMemType());
             return "수정 성공";
         } catch (Exception e) {
             return null;

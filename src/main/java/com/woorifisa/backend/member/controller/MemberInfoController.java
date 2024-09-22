@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.woorifisa.backend.common.exception.SessionNotValidException;
 import com.woorifisa.backend.common.security.springsecurity.MemberDetail;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
+import com.woorifisa.backend.member.dto.MemberInfoEditDTO;
 import com.woorifisa.backend.member.dto.SubscriptionResponseDTO;
+import com.woorifisa.backend.member.exception.NotValidPasswordException;
 import com.woorifisa.backend.member.service.AuthService;
 import com.woorifisa.backend.member.service.MemberInfoService;
 
@@ -40,8 +41,8 @@ public class MemberInfoController {
 
     @PutMapping("/info/update")
     @Operation(summary = "유저 정보 수정 (개발 완료 - 그러나 예외 처리 추가 해야함)", description = "user 로그인 정보 검증 후 정보 수정")
-    public String updateMemberInfo(@RequestBody MemberInfoDTO memberInfoDTO, @AuthenticationPrincipal MemberDetail memberDetail) throws SessionNotValidException {
-        return memberInfoService.updateMemberInfo(memberInfoDTO, memberDetail.getMemNum()); 
+    public String updateMemberInfo(@RequestBody MemberInfoEditDTO memberInfoEditDTO, @AuthenticationPrincipal MemberDetail memberDetail) throws NotValidPasswordException, SessionNotValidException {
+        return memberInfoService.updateMemberInfo(memberInfoEditDTO, memberDetail.getMemNum()); 
     }
     
     @GetMapping("/sublist/get")

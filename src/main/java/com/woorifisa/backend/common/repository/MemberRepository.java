@@ -14,6 +14,7 @@ import com.woorifisa.backend.common.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
     Member findByMemId(String memId);
+    Member findByMemNum(String memNum);
 
     @Query(value = "select * from member order by mem_num", nativeQuery = true)
     public List<Member> memberAll();
