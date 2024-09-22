@@ -24,10 +24,13 @@ import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
 import com.woorifisa.backend.common.security.encryption.EncryptService;
+
+import com.woorifisa.backend.subscription.dto.MemberMailDTO;
 import com.woorifisa.backend.subscription.dto.PaymentInsertDTO;
 import com.woorifisa.backend.subscription.dto.PaymentPrintDTO;
 import com.woorifisa.backend.subscription.dto.ProductPayDTO;
 import com.woorifisa.backend.subscription.util.OrderIdGenerator;
+import com.woorifisa.backend.subscription.util.SendMail;
 
 import jakarta.transaction.Transactional;
 
@@ -36,10 +39,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
     @Value("${toss.api.secret-key}")
     private String apiSecretKey;
-
     @Value("${toss.api.billing-auth-url}")
     private String billingAuthUrl;  // 빌링키 발급
-
     @Value("${toss.api.billing-pay-url}")
     private String billingPayUrl;   // 자동 결제, billingKey 추가로 붙어야함
 
@@ -55,8 +56,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     private OrderIdGenerator orderIdGenerator;
     @Autowired
     private EncryptService encryptService;
+    @Autowired
+    private SendMail sendMail;
 
- 
     @Override
     public List<PaymentPrintDTO> paymentAllByMember(String memNum) {
         List<Object[]> payment = paymentRepository.paymentAllByMember(memNum);
@@ -130,8 +132,21 @@ public class SubscriptionServiceImpl implements SubscriptionService{
                 // 배송중으로 변경
                 subscriptionRepository.updateToInDelivery(today, paymentKey); // 현재 날짜
             } else{
-                subscriptionRepository.deleteSubById(subscription.getSubNum());
                 System.out.println("결제 실패, 구독 취소");
+                
+                Object[] object = memberRepository.findMemEmailByMemNum(subscription.getMemNum(), subscription.getSubNum()).get(0);
+                MemberMailDTO memInfo = new MemberMailDTO(
+                    (String) object[0], // memEmail
+                    (String) object[1]  // memName
+                    );
+                    String subject = "[Woori Health]자동 결제 실패로 인한 구독 취소";
+                    String message = String.format("안녕하세요, %s님의 구독 결제가 실패하여 자동으로 구독이 취소되었습니다. 자세한 사항은 관리자에게 문의 바랍니다.", memInfo.getMemName());
+                    
+                System.out.println("메일 전송 시도");
+                sendMail.sendEmail(memInfo.getMemEmail(), subject, message);
+                System.out.println("메일 전송을 완료했습니다.");
+
+                subscriptionRepository.deleteSubById(subscription.getSubNum());
             }
         }
 
