@@ -66,4 +66,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     // subscription ----------------------------------------------------------------------------------------------------------------------------------------------
     @Query(value = "select prod_name, prod_price from product where prod_num = :prodNum", nativeQuery = true)
     public List<Object[]> findPayNameAndPayPrice(@Param("prodNum") String prodNum);
+
+    @Query(value = "select prod_name from product p join subscription s on p.prod_num = s.prod_num where s.prod_num = :prodNum and s.sub_num = :subNum", nativeQuery = true)
+    public String findProdNameBySubNum(@Param("prodNum") String prodNum, @Param("subNum") String subNum);
 }

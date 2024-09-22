@@ -128,19 +128,33 @@ public class SubscriptionServiceImpl implements SubscriptionService{
             // 1. 자동 결제
             String paymentKey = autoPay(subscription);
 
+            Object[] object = memberRepository.findMemEmailByMemNum(subscription.getMemNum(), subscription.getSubNum()).get(0);
+            MemberMailDTO memInfo = new MemberMailDTO(
+                (String) object[0], // memEmail
+                (String) object[1]  // memName
+                );
+
+            String prodName = productRepository.findProdNameBySubNum(subscription.getProdNum(), subscription.getSubNum());
+                
+            String subject, message;
+
             if(paymentKey != null){
+                System.out.println("결제 성공, 구독테이블 수정");
+
+                subject = String.format("[Woori Health] %s 상품 결제 성공", prodName);
+                message = String.format("안녕하세요, %s님의 %s 상품 구독 결제되었습니다. ", memInfo.getMemName(), prodName);
+               
+                System.out.println("메일 전송 시도");
+                sendMail.sendEmail(memInfo.getMemEmail(), subject, message);
+                System.out.println("메일 전송을 완료했습니다.");
+                
                 // 배송중으로 변경
                 subscriptionRepository.updateToInDelivery(today, paymentKey); // 현재 날짜
             } else{
-                System.out.println("결제 실패, 구독 취소");
-                
-                Object[] object = memberRepository.findMemEmailByMemNum(subscription.getMemNum(), subscription.getSubNum()).get(0);
-                MemberMailDTO memInfo = new MemberMailDTO(
-                    (String) object[0], // memEmail
-                    (String) object[1]  // memName
-                    );
-                    String subject = "[Woori Health]자동 결제 실패로 인한 구독 취소";
-                    String message = String.format("안녕하세요, %s님의 구독 결제가 실패하여 자동으로 구독이 취소되었습니다. 자세한 사항은 관리자에게 문의 바랍니다.", memInfo.getMemName());
+                System.out.println("결제 실패, 구독 취소");                
+               
+                subject = String.format("[Woori Health]%s 상품 자동 결제 실패로 인한 구독 취소", prodName);
+                message = String.format("안녕하세요, %s님의 %s 상품 구독 결제가 실패하여 자동으로 구독이 취소되었습니다. 자세한 사항은 관리자에게 문의 바랍니다.", memInfo.getMemName(), prodName);
                     
                 System.out.println("메일 전송 시도");
                 sendMail.sendEmail(memInfo.getMemEmail(), subject, message);
