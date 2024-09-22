@@ -1,4 +1,4 @@
-package com.woorifisa.backend.main.dto;
+package com.woorifisa.backend.subscription.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

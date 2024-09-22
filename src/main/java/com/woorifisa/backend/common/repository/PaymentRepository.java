@@ -25,4 +25,6 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
                           @Param("billingKey") String billingKey,
                           @Param("brand") String brand);
 
+    @Query(value = "select pay_billingkey from payment where pay_num = :payNum", nativeQuery = true)
+    public String findBillingKeyByPayNum(@Param("payNum") String payNum);
 }

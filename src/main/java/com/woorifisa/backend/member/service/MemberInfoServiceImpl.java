@@ -14,11 +14,8 @@ import com.woorifisa.backend.common.exception.NoDataExsistException;
 import com.woorifisa.backend.common.repository.MemberRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
-import com.woorifisa.backend.member.dto.LoginSessionDTO;
 import com.woorifisa.backend.member.dto.MemberInfoDTO;
 import com.woorifisa.backend.member.dto.SubscriptionResponseDTO;
-
-import jakarta.servlet.http.HttpSession;
 
 
 
