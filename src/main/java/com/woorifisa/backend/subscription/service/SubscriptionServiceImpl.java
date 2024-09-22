@@ -5,6 +5,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     private String billingAuthUrl;  // 빌링키 발급
 
     @Value("${toss.api.billing-pay-url}")
-    private String billingPayUrl;   // 자동 결제
+    private String billingPayUrl;   // 자동 결제, billingKey 추가로 붙어야함
 
     @Autowired
     public PaymentRepository paymentRepository;
@@ -52,9 +53,6 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Autowired
     private OrderIdGenerator orderIdGenerator;
  
-     // Basic 인증 헤더
-    public String authHeader = "Basic " + Base64.getEncoder().encodeToString((apiSecretKey + ":").getBytes());
-
     @Override
     public List<PaymentPrintDTO> paymentAllByMember(String memNum) {
         List<Object[]> payment = paymentRepository.paymentAllByMember(memNum);
@@ -100,10 +98,27 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         LocalDate today = LocalDate.now();
 
         // 결제 처리할 List 출력
-        List<SubscriptionDTO> subscriptionList = subscriptionRepository.findByDeliveryDate(today);
+        List<Object[]> resultList = subscriptionRepository.findByDeliveryDate(today);
+        List<SubscriptionDTO> subscriptionList = resultList.stream()
+                .map(result -> new SubscriptionDTO(
+                    (String) result[0], // sub_num
+                    (Integer) result[1], // sub_per
+                    new java.util.Date(((java.sql.Date) result[2]).getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),  // sub_start
+                    new java.util.Date(((java.sql.Date) result[3]).getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),  // sub_deli
+                    (Integer) result[4], // sub_stat
+                    new java.util.Date(((java.sql.Date) result[5]).getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),  // sub_upd
+                    (Integer) result[6], // sub_cntA
+                    (String) result[7], // mem_num
+                    (String) result[8], // prod_num
+                    (String) result[9], // pay_num
+                    (String) result[10] // sub_paymentKey    
+                ))
+                .collect(Collectors.toList());
 
         for(SubscriptionDTO subscription : subscriptionList){
             
+            System.out.println(subscription.getSubNum() + " " + subscription.getSubPer()  + " " +  subscription.getSubStart()  + " ");
+
             // 1. 자동 결제
             String paymentKey = autoPay(subscription);
 
@@ -124,18 +139,24 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     }
 
     public String autoPay(SubscriptionDTO subscription){
-        String billingKey = paymentRepository.findBillingKeyByPayNum(subscription.getPayNum());         // 빌링키(billingKey) 가져오기
-        ProductPayDTO product = productRepository.findPayNameAndPayPrice(subscription.getProdNum());    // 상품명(orderName), 상품 가격(amount) 가져오기 
-        String memNum = subscription.getMemNum();                                                       // customerKey
-        String orderId = orderIdGenerator.generateOrderId();                                            // random한 영문 대소문자, 숫자, 특수문자 -, _, =, ., @ 를 최소 1개 이상 포함한 최소 2자 이상 최대 300자 이하의 문자열
+        String billingKey = paymentRepository.findBillingKeyByPayNum(subscription.getPayNum());                     // 빌링키(billingKey) 가져오기
+        Object[] object = productRepository.findPayNameAndPayPrice(subscription.getProdNum()).get(0);                // 상품명(orderName), 상품 가격(amount) 가져오기 
+        ProductPayDTO product = new ProductPayDTO(
+            (String) object[0], // orderName
+            (Integer) object[1] // amount
+        );
+        String memNum = subscription.getMemNum();                                                                   // customerKey
+        String orderId = orderIdGenerator.generateOrderId();                                                        // random한 영문 대소문자, 숫자, 특수문자 -, _, =, ., @ 를 최소 1개 이상 포함한 최소 2자 이상 최대 300자 이하의 문자열
         
         String reqBody = String.format(
                             "{\"billingKey\":\"%s\", \"amount\":\"%d\", \"customerKey\":\"%s\", \"orderId\":\"%s\", \"orderName\":\"%s\"}",
                             billingKey, product.getProdPrice(), memNum, orderId, product.getProdName());
+        // Basic 인증 헤더
+        String authHeader = "Basic " + Base64.getEncoder().encodeToString((apiSecretKey + ":").getBytes());
 
         try{
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(billingPayUrl))
+                    .uri(URI.create(billingPayUrl+billingKey))
                     .header("Authorization", authHeader)
                     .header("Content-Type", "application/json")
                     .method("POST", HttpRequest.BodyPublishers.ofString(reqBody))
@@ -171,6 +192,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         String reqBody = String.format(
                 "{\"customerKey\":\"%s\",\"cardNumber\":\"%s\",\"cardExpirationYear\":\"%s\",\"cardExpirationMonth\":\"%s\",\"customerIdentityNumber\":\"%s\"}",
                 memNum, card, expYear, expMonth, memBirth);
+
+        // Basic 인증 헤더
+        String authHeader = "Basic " + Base64.getEncoder().encodeToString((apiSecretKey + ":").getBytes());
 
         try {
             HttpRequest request = HttpRequest.newBuilder()

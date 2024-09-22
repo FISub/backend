@@ -3,6 +3,7 @@ package com.woorifisa.backend.common.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -45,5 +46,6 @@ public class Subscription {
     @JoinColumn(name = "pay_num")
     private Payment payNum;
     @NotNull
+    @Column(name = "sub_paymentKey")
     private String subPaymentKey;
 }
