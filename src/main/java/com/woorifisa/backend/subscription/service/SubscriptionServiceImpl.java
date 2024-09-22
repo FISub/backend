@@ -135,7 +135,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
                     (String) object[0], // memEmail
                     (String) object[1]  // memName
                     );
-                    String subject = "자동 결제 실패로 인한 구독 취소";
+                    String subject = "[Woori Health]자동 결제 실패로 인한 구독 취소";
                     String message = String.format("안녕하세요, %s님의 구독 결제가 실패하여 자동으로 구독이 취소되었습니다. 자세한 사항은 관리자에게 문의 바랍니다.", memInfo.getMemName());
                     
                 System.out.println("메일 전송 시도");
