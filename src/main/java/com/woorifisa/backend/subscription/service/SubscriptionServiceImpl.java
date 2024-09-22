@@ -23,6 +23,7 @@ import com.woorifisa.backend.common.repository.MemberRepository;
 import com.woorifisa.backend.common.repository.PaymentRepository;
 import com.woorifisa.backend.common.repository.ProductRepository;
 import com.woorifisa.backend.common.repository.SubscriptionRepository;
+import com.woorifisa.backend.common.security.encryption.EncryptService;
 import com.woorifisa.backend.subscription.dto.PaymentInsertDTO;
 import com.woorifisa.backend.subscription.dto.PaymentPrintDTO;
 import com.woorifisa.backend.subscription.dto.ProductPayDTO;
@@ -52,6 +53,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     private ProductRepository productRepository;
     @Autowired
     private OrderIdGenerator orderIdGenerator;
+    @Autowired
+    private EncryptService encryptService;
+
  
     @Override
     public List<PaymentPrintDTO> paymentAllByMember(String memNum) {
@@ -139,7 +143,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     }
 
     public String autoPay(SubscriptionDTO subscription){
-        String billingKey = paymentRepository.findBillingKeyByPayNum(subscription.getPayNum());                     // 빌링키(billingKey) 가져오기
+        String encryptedBillingKey = paymentRepository.findBillingKeyByPayNum(subscription.getPayNum());                     // 빌링키(billingKey) 가져오기
+        String decryptedBillingKey = encryptService.decryptBillingKey(encryptedBillingKey);                                  // 결제 시 사용 가능한 형태로 빌링키 복호화
+
         Object[] object = productRepository.findPayNameAndPayPrice(subscription.getProdNum()).get(0);                // 상품명(orderName), 상품 가격(amount) 가져오기 
         ProductPayDTO product = new ProductPayDTO(
             (String) object[0], // orderName
@@ -150,13 +156,13 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         
         String reqBody = String.format(
                             "{\"billingKey\":\"%s\", \"amount\":\"%d\", \"customerKey\":\"%s\", \"orderId\":\"%s\", \"orderName\":\"%s\"}",
-                            billingKey, product.getProdPrice(), memNum, orderId, product.getProdName());
+                            decryptedBillingKey, product.getProdPrice(), memNum, orderId, product.getProdName());
         // Basic 인증 헤더
         String authHeader = "Basic " + Base64.getEncoder().encodeToString((apiSecretKey + ":").getBytes());
 
         try{
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(billingPayUrl+billingKey))
+                    .uri(URI.create(billingPayUrl+decryptedBillingKey))
                     .header("Authorization", authHeader)
                     .header("Content-Type", "application/json")
                     .method("POST", HttpRequest.BodyPublishers.ofString(reqBody))
