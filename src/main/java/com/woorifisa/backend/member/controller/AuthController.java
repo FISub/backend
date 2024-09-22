@@ -5,10 +5,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.woorifisa.backend.member.dto.MemberInfoDTO;
+import com.woorifisa.backend.member.dto.JoinDTO;
 import com.woorifisa.backend.member.exception.JoinException;
 import com.woorifisa.backend.member.service.AuthService;
-
 import io.swagger.v3.oas.annotations.Operation;
 
 @RequestMapping("/auth")
@@ -21,8 +20,8 @@ public class AuthController {
 
     @PostMapping("/join")
     @Operation(summary = "회원가입 (개발 완료)", description = "회원가입 시 회원 정보를 저장")
-    public String join(@RequestBody MemberInfoDTO memberInfoDTO) throws JoinException{
-        return authService.join(memberInfoDTO);
+    public String join(@RequestBody JoinDTO joinDTO) throws JoinException{
+        return authService.join(joinDTO);
     }
     // 세션 정보 조회 로직 수정해야함
     /*

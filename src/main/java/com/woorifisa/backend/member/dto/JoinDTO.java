@@ -13,8 +13,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class MemberInfoDTO {
+public class JoinDTO {
     private String memId;
+    private String memPw;
     private String memName;
     private String memEmail;
     private String memPhone;

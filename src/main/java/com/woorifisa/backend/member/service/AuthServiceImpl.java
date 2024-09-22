@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.woorifisa.backend.common.entity.Member;
 import com.woorifisa.backend.common.repository.MemberRepository;
-import com.woorifisa.backend.member.dto.MemberInfoDTO;
+import com.woorifisa.backend.member.dto.JoinDTO;
 import com.woorifisa.backend.member.exception.JoinException;
 
 @Service
@@ -22,17 +21,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public String join(MemberInfoDTO memberInfoDTO) throws JoinException {
-        String newMemID = memberInfoDTO.getMemId();
+    public String join(JoinDTO joinDTO) throws JoinException {
+        String newMemID = joinDTO.getMemId();
         Member findedMember = memberRepository.findByMemId(newMemID);
         if (findedMember != null){
-            throw new JoinException("이미 존재하는 ID");
+            throw new JoinException("이미 존재하는 ID입니다.");
+        }
+        if (joinDTO.getMemPw().length() < 4){
+            throw new JoinException("4자 이상의 비밀번호를 입력해 주세요.");
         }
 
         try{
-            memberRepository.insertMem(memberInfoDTO.getMemName(), memberInfoDTO.getMemId(), passwordEncoder.encode(memberInfoDTO.getMemPw()), 
-                                       memberInfoDTO.getMemEmail(), memberInfoDTO.getMemPhone(), memberInfoDTO.getMemSex(), 
-                                       memberInfoDTO.getMemAddr(), memberInfoDTO.getMemBirth(), memberInfoDTO.getMemType());
+            memberRepository.insertMem(joinDTO.getMemName(), joinDTO.getMemId(), passwordEncoder.encode(joinDTO.getMemPw()), 
+                                       joinDTO.getMemEmail(), joinDTO.getMemPhone(), joinDTO.getMemSex(), 
+                                       joinDTO.getMemAddr(), joinDTO.getMemBirth(), joinDTO.getMemType());
         } catch (Exception e) {
             e.printStackTrace();
             throw new JoinException("회원가입 실패");

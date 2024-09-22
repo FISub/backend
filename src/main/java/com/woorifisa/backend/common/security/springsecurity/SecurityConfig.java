@@ -92,6 +92,7 @@ public class SecurityConfig {
         {  
             "/auth/sessionInfo",
             "/member/**",
+            "/subscription/**",
             "/main/subscriptionInsert",
             "/main/reviewInsert/reviewInsert",
             "/main/reviewDelete",
