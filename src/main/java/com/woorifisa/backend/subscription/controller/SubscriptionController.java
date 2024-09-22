@@ -92,8 +92,6 @@ public class SubscriptionController {
         String memNum = memberDetail.getMemNum();
         dto.setMemNum(memNum);
 
-        
-
         // 조회수 log 남기기
         log.info(String.format("Subscription - %s - %s", dto.getProdNum(), memNum));
 
