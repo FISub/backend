@@ -77,7 +77,6 @@ public class SubscriptionController {
 
         PaymentInsertDTO dto = new PaymentInsertDTO();
         dto.setMemNum(memNum);
-        // dto.setPayBillingKey(map.get("billingKey"));
         dto.setPayBillingKey(encryptedBillingKey);
         dto.setPayBrand(map.get("brand"));
         dto.setPayCard(map.get("card"));
@@ -92,7 +91,7 @@ public class SubscriptionController {
         String memNum = memberDetail.getMemNum();
         dto.setMemNum(memNum);
 
-        // 조회수 log 남기기
+        // 구독 log 남기기
         log.info(String.format("Subscription - %s - %s", dto.getProdNum(), memNum));
 
         return SubscriptionService.subscriptionInsert(dto);
